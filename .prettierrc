@@ -1,0 +1,10 @@
+{
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^components/(.*)$", "^[./]"],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true,
+  "printWidth": 120,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "endOfLine": "auto"
+}

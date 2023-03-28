@@ -34,3 +34,34 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 ## 📝 Notes
 
 - [Expo TypeScript guide](https://docs.expo.dev/versions/latest/guides/typescript/)
+
+## Todo
+
+- Dashboard
+  - [ ] Anzeigen aller Server
+  - [ ] Anzeigen der Spielerliste eines Servers
+- Profil
+  - Spieler
+  - Fahrzeuge
+    - [ ] Anzeigen der aktiven Fahrzeuge
+          _(weiter unten)_
+    - [ ] Anzeigen der inaktiven Fahrzeuge
+  - Häuser
+    - [ ] Anzeigen der Häuser
+    - [ ] Anzeigen der Appartments
+    - [ ] Anzeigen der Baustellen
+- Markt
+  - [ ] Anzeigen der aktuellen Marktpreise
+  - [ ] Anzeigen des aktuellen Cop-Bonus
+  - [ ] Anzeigen wann die Preise neu berechnet werden
+- Firmen
+  - [ ] Firmen des Spielers
+  - [ ] Firmenshops
+- Händler
+  - [ ] Fahrzeuge
+  - [ ] Items
+- Changelogs
+  - [ ] Anzeigen der Changelogs
+- Einstellungen
+  - [ ] Theme
+  - [ ] ApiKey
