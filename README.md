@@ -37,6 +37,8 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 
 ## Todo
 
+- [ ] Splash Screen
+  - https://github.com/expo/examples/blob/master/with-splash-screen/App.js
 - Dashboard
   - [ ] Anzeigen aller Server
   - [ ] Anzeigen der Spielerliste eines Servers
@@ -65,3 +67,10 @@ TypeScript is a superset of JavaScript which gives you static types and powerful
 - Einstellungen
   - [ ] Theme
   - [ ] ApiKey
+
+## Development
+
+### Faq
+
+|Question|Answer|
+|Where can I find icons?|[Here](https://pictogrammers.com/library/mdi/)|
