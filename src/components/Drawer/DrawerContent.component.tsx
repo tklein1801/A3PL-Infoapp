@@ -1,10 +1,10 @@
 import { DrawerContentComponentProps, DrawerContentScrollView } from '@react-navigation/drawer';
 import React from 'react';
-import { Image, View } from 'react-native';
-import { Avatar, Caption, Drawer, Text, Title, useTheme } from 'react-native-paper';
+import { View } from 'react-native';
+import { Avatar, Caption, Drawer, Title, useTheme } from 'react-native-paper';
 import { DrawerScreens } from '../../constants/screens.constant';
 
-export const DrawerContent = (props: DrawerContentComponentProps) => {
+export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
   const id = React.useId();
   const theme = useTheme();
 
@@ -13,7 +13,12 @@ export const DrawerContent = (props: DrawerContentComponentProps) => {
   }, []);
 
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView
+      {...props}
+      style={{
+        backgroundColor: theme.colors.surface,
+      }}
+    >
       <View
         style={{
           display: 'flex',
@@ -31,8 +36,8 @@ export const DrawerContent = (props: DrawerContentComponentProps) => {
           style={{ marginRight: 16 }}
         />
         <View style={{ display: 'flex', flexDirection: 'column' }}>
-          <Title style={{ fontWeight: 'bold' }}>Justus Bollmann</Title>
-          <Caption style={{ fontSize: 14, lineHeight: 14 }}>76561198276412464</Caption>
+          <Title style={{ fontWeight: 'bold', color: theme.colors.onSurface }}>Justus Bollmann</Title>
+          <Caption style={{ fontSize: 14, lineHeight: 14, color: theme.colors.onSurface }}>76561198276412464</Caption>
         </View>
       </View>
 

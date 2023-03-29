@@ -1,5 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import React from 'react';
+import { CustomAppBar } from '../components/CustomAppBar/CustomAppBar.component';
 import { DrawerContent } from '../components/Drawer/DrawerContent.component';
 import { DrawerScreens } from '../constants/screens.constant';
 
@@ -16,6 +17,7 @@ export const DrawerNavigator = () => {
         drawerStyle: {
           width: '75%',
         },
+        header: (props) => <CustomAppBar {...props} />,
       }}
     >
       {DrawerScreens.map((screen) => (
