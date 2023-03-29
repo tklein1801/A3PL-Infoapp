@@ -4,11 +4,14 @@ import { Appbar, useTheme } from 'react-native-paper';
 
 export const CustomAppBar: React.FC<DrawerHeaderProps> = ({ route, navigation }) => {
   const theme = useTheme();
-  const title = route.name;
+
   return (
     <Appbar.Header theme={theme}>
       <Appbar.Action icon="menu" onPress={navigation.toggleDrawer} iconColor={theme.colors.onSurface} />
-      <Appbar.Content title={title} titleStyle={theme.fonts.titleLarge} />
+      <Appbar.Content
+        title={route.params && 'titleOverride' in route.params ? (route.params.titleOverride as string) : route.name}
+        titleStyle={theme.fonts.titleLarge}
+      />
     </Appbar.Header>
   );
 };

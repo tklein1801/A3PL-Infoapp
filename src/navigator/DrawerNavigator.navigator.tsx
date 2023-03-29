@@ -21,7 +21,14 @@ export const DrawerNavigator = () => {
       }}
     >
       {DrawerScreens.map((screen) => (
-        <Drawer.Screen key={id + 'drawer-screen-' + screen.name} name={screen.name} component={screen.component} />
+        <Drawer.Screen
+          key={id + 'drawer-screen-' + screen.name}
+          name={screen.name}
+          component={screen.component}
+          initialParams={{
+            titleOverride: screen.label,
+          }}
+        />
       ))}
     </Drawer.Navigator>
   );
