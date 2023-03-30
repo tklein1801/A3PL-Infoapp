@@ -1,18 +1,61 @@
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, Card, List } from 'react-native-paper';
+import { Changelog } from '../components/Changelog/Changelog.component';
+import { Layout } from '../components/Layout/Layout.component';
+import { PanthorService } from '../services';
+import { Changelog as ChangelogModel } from '../types';
 
 export const ChangelogScreen = () => {
+  const [loading, setLoading] = React.useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [changelogs, setChangelogs] = React.useState<ChangelogModel[]>([]);
+  const [expandedChangelog, setExpandedChangelog] = React.useState<ChangelogModel['id'] | null>(null);
+
+  const handler = {
+    fetchData: async () => {
+      try {
+        const result = await PanthorService.getChangelogs();
+        setChangelogs(result);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    onRefresh: () => {
+      setRefreshing(true);
+      handler.fetchData().finally(() => setRefreshing(false));
+    },
+    onChangelogPress: (changelogId: ChangelogModel['id']) => {
+      setExpandedChangelog(changelogId === expandedChangelog ? null : changelogId);
+    },
+  };
+
+  React.useEffect(() => {
+    handler.fetchData().finally(() => setLoading(false));
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Changelogs</Text>
-    </View>
+    <Layout
+      refreshControl={{
+        refreshing: refreshing,
+        onRefresh: handler.onRefresh,
+      }}
+    >
+      {loading ? (
+        <Card elevation={1} style={{ padding: 16 }}>
+          <ActivityIndicator animating={true} />
+        </Card>
+      ) : (
+        <List.AccordionGroup expandedId={expandedChangelog} onAccordionPress={handler.onChangelogPress}>
+          {changelogs.map((changelog, index, arr) => (
+            <Changelog
+              changelog={changelog}
+              isFirst={index === 0}
+              isLast={index === arr.length - 1}
+              isExpanded={expandedChangelog === changelog.id}
+            />
+          ))}
+        </List.AccordionGroup>
+      )}
+    </Layout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
