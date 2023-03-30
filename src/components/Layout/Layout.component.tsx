@@ -4,7 +4,7 @@ import { Theme } from '../../theme/theme';
 import { RefreshControl } from '../RefreshControl/RefreshControl.component';
 
 export type LayoutProps = React.PropsWithChildren & {
-  refreshControl: { refreshing: boolean; onRefresh: () => void };
+  refreshControl?: { refreshing: boolean; onRefresh: () => void };
 };
 
 export const Layout: React.FC<LayoutProps> = ({ refreshControl = undefined, children }) => {
