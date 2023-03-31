@@ -2,24 +2,34 @@ import React from 'react';
 import { Divider, List, Surface, SurfaceProps, useTheme } from 'react-native-paper';
 import type { ListAccordionProps } from 'react-native-paper';
 
-export type AccordionProps = React.PropsWithChildren<{
-  id: ListAccordionProps['id'];
-  title: ListAccordionProps['title'];
-  titleStyles?: ListAccordionProps['titleStyle'];
-  titleNumberOfLines?: ListAccordionProps['titleNumberOfLines'];
-  accordionStyle?: ListAccordionProps['style'];
-  surfaceStyle?: SurfaceProps['style'];
-  isFirst?: boolean;
-  isLast?: boolean;
-  isExpanded?: boolean;
-  divider?: boolean;
-}>;
+export type AccordionProps = React.PropsWithChildren<
+  {
+    accordionStyle?: ListAccordionProps['style'];
+    surfaceStyle?: SurfaceProps['style'];
+    isFirst?: boolean;
+    isLast?: boolean;
+    isExpanded?: boolean;
+    divider?: boolean;
+  } & Pick<
+    ListAccordionProps,
+    | 'id'
+    | 'title'
+    | 'titleNumberOfLines'
+    | 'titleStyle'
+    | 'description'
+    | 'descriptionNumberOfLines'
+    | 'descriptionStyle'
+  >
+>;
 
 export const Accordion: React.FC<AccordionProps> = ({
   id,
   title,
   titleNumberOfLines,
-  titleStyles,
+  titleStyle,
+  description,
+  descriptionNumberOfLines,
+  descriptionStyle,
   children,
   accordionStyle,
   surfaceStyle,
@@ -53,8 +63,11 @@ export const Accordion: React.FC<AccordionProps> = ({
       <List.Accordion
         id={id}
         title={title}
+        description={description}
+        descriptionNumberOfLines={descriptionNumberOfLines}
+        descriptionStyle={descriptionStyle}
         titleNumberOfLines={titleNumberOfLines}
-        titleStyle={titleStyles}
+        titleStyle={titleStyle}
         style={mergedAccordionStyle}
       >
         <Surface style={mergedSurfaceStyle}>{children}</Surface>
