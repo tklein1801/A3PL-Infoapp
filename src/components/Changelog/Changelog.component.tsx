@@ -1,8 +1,9 @@
 import { format } from 'date-fns';
 import React from 'react';
 import { View } from 'react-native';
-import { List, Surface, Text, useTheme } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { Changelog as ChangelogModel } from '../../types';
+import { Accordion } from '../Accordion/Accordion.component';
 
 export type ChangelogProps = {
   changelog: ChangelogModel;
@@ -17,25 +18,18 @@ export const Changelog: React.FC<ChangelogProps> = ({
   isLast = false,
   isExpanded = false,
 }) => {
-  const theme = useTheme();
   const { id, version, changeMission, changeMod, changeMap, releaseAt } = changelog;
-  const accordionStyle = {
-    backgroundColor: theme.colors.elevation.level1,
-    borderTopLeftRadius: isFirst ? theme.roundness * 3 : 0,
-    borderTopRightRadius: isFirst ? theme.roundness * 3 : 0,
-    borderBottomLeftRadius: isLast && !isExpanded ? theme.roundness * 3 : 0,
-    borderBottomRightRadius: isLast && !isExpanded ? theme.roundness * 3 : 0,
-  };
 
-  const surfaceStyle = {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderBottomLeftRadius: isLast && isExpanded ? theme.roundness * 3 : 0,
-    borderBottomRightRadius: isLast && isExpanded ? theme.roundness * 3 : 0,
-  };
   return (
-    <List.Accordion id={id} title={`Changelog v${version} - ${format(releaseAt, 'dd.MM.yy')}`} style={accordionStyle}>
-      <Surface style={surfaceStyle}>
+    <Accordion
+      id={id}
+      title={`Changelog v${version} - ${format(releaseAt, 'dd.MM.yy')}`}
+      isFirst={isFirst}
+      isLast={isLast}
+      isExpanded={isExpanded}
+      divider
+    >
+      <React.Fragment>
         {changeMission.length > 0 && (
           <React.Fragment>
             <Text variant="titleSmall">Mission</Text>
@@ -72,7 +66,7 @@ export const Changelog: React.FC<ChangelogProps> = ({
             </View>
           </React.Fragment>
         )}
-      </Surface>
-    </List.Accordion>
+      </React.Fragment>
+    </Accordion>
   );
 };
