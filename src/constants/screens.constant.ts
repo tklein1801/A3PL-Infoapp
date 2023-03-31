@@ -18,7 +18,7 @@ export const DrawerScreens: ScreenConfig = [
   { name: 'Profile', label: 'Profil', icon: 'account-circle', component: ProfileScreen },
   { name: 'Market', label: 'Markt', icon: 'finance', component: MarketScreen },
   { name: 'Company', label: 'Firmen', icon: 'domain', component: CompanyScreen },
-  { name: 'Trader', label: 'Trader', icon: 'store', component: TraderScreen },
+  { name: 'Trader', label: 'Händler', icon: 'store', component: TraderScreen },
   { name: 'Changelog', label: 'Changelogs', icon: 'text-box-multiple', component: ChangelogScreen },
   { name: 'Settings', label: 'Einstellungen', icon: 'cog', component: SettingsScreen },
 ];
