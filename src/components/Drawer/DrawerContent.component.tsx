@@ -41,7 +41,7 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
         </View>
       </View>
 
-      <View style={{}}>
+      <View>
         {DrawerScreens.map((screen) => (
           <Drawer.Item
             key={id + 'drawer-item-' + screen.name}

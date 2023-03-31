@@ -3,14 +3,11 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Changelog as ChangelogModel } from '../../types';
-import { Accordion } from '../Accordion/Accordion.component';
+import { Accordion, AccordionProps } from '../Accordion/Accordion.component';
 
 export type ChangelogProps = {
   changelog: ChangelogModel;
-  isFirst?: boolean;
-  isLast?: boolean;
-  isExpanded?: boolean;
-};
+} & Pick<AccordionProps, 'isExpanded' | 'isLast' | 'isFirst'>;
 
 export const Changelog: React.FC<ChangelogProps> = ({
   changelog,

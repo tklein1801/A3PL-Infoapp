@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, List, Surface, useTheme } from 'react-native-paper';
+import { Divider, List, Surface, SurfaceProps, useTheme } from 'react-native-paper';
 import type { ListAccordionProps } from 'react-native-paper';
 
 export type AccordionProps = React.PropsWithChildren<{
@@ -7,6 +7,8 @@ export type AccordionProps = React.PropsWithChildren<{
   title: ListAccordionProps['title'];
   titleStyles?: ListAccordionProps['titleStyle'];
   titleNumberOfLines?: ListAccordionProps['titleNumberOfLines'];
+  accordionStyle?: ListAccordionProps['style'];
+  surfaceStyle?: SurfaceProps['style'];
   isFirst?: boolean;
   isLast?: boolean;
   isExpanded?: boolean;
@@ -19,25 +21,33 @@ export const Accordion: React.FC<AccordionProps> = ({
   titleNumberOfLines,
   titleStyles,
   children,
+  accordionStyle,
+  surfaceStyle,
   isFirst = false,
   isLast = false,
   isExpanded = false,
   divider = false,
 }) => {
   const theme = useTheme();
-  const accordionStyle = {
-    backgroundColor: theme.colors.elevation.level1,
-    borderTopLeftRadius: isFirst ? theme.roundness * 3 : 0,
-    borderTopRightRadius: isFirst ? theme.roundness * 3 : 0,
-    borderBottomLeftRadius: isLast && !isExpanded ? theme.roundness * 3 : 0,
-    borderBottomRightRadius: isLast && !isExpanded ? theme.roundness * 3 : 0,
-  };
-  const surfaceStyle = {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderBottomLeftRadius: isLast && isExpanded ? theme.roundness * 3 : 0,
-    borderBottomRightRadius: isLast && isExpanded ? theme.roundness * 3 : 0,
-  };
+  const mergedAccordionStyle = [
+    {
+      backgroundColor: theme.colors.elevation.level1,
+      borderTopLeftRadius: isFirst ? theme.roundness * 3 : 0,
+      borderTopRightRadius: isFirst ? theme.roundness * 3 : 0,
+      borderBottomLeftRadius: isLast && !isExpanded ? theme.roundness * 3 : 0,
+      borderBottomRightRadius: isLast && !isExpanded ? theme.roundness * 3 : 0,
+    },
+    accordionStyle,
+  ];
+  const mergedSurfaceStyle = [
+    {
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      borderBottomLeftRadius: isLast && isExpanded ? theme.roundness * 3 : 0,
+      borderBottomRightRadius: isLast && isExpanded ? theme.roundness * 3 : 0,
+    },
+    surfaceStyle,
+  ];
   return (
     <React.Fragment>
       <List.Accordion
@@ -45,9 +55,9 @@ export const Accordion: React.FC<AccordionProps> = ({
         title={title}
         titleNumberOfLines={titleNumberOfLines}
         titleStyle={titleStyles}
-        style={accordionStyle}
+        style={mergedAccordionStyle}
       >
-        <Surface style={surfaceStyle}>{children}</Surface>
+        <Surface style={mergedSurfaceStyle}>{children}</Surface>
       </List.Accordion>
       {!isFirst && divider && <Divider />}
     </React.Fragment>

@@ -47,7 +47,7 @@ export const ChangelogScreen = () => {
       ) : (
         <List.AccordionGroup expandedId={expandedChangelog} onAccordionPress={handler.onChangelogPress}>
           {changelogs.map((changelog, index, arr) => (
-            <React.Fragment>
+            <React.Fragment key={changelog.id}>
               <Changelog
                 changelog={changelog}
                 isFirst={index === 0}
