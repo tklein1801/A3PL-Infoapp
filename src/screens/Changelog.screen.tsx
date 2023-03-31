@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Card, List } from 'react-native-paper';
+import { ActivityIndicator, Card, Divider, List } from 'react-native-paper';
 import { Changelog } from '../components/Changelog/Changelog.component';
 import { Layout } from '../components/Layout/Layout.component';
 import { PanthorService } from '../services';
@@ -47,12 +47,15 @@ export const ChangelogScreen = () => {
       ) : (
         <List.AccordionGroup expandedId={expandedChangelog} onAccordionPress={handler.onChangelogPress}>
           {changelogs.map((changelog, index, arr) => (
-            <Changelog
-              changelog={changelog}
-              isFirst={index === 0}
-              isLast={index === arr.length - 1}
-              isExpanded={expandedChangelog === changelog.id}
-            />
+            <React.Fragment>
+              {index !== 0 && <Divider />}
+              <Changelog
+                changelog={changelog}
+                isFirst={index === 0}
+                isLast={index === arr.length - 1}
+                isExpanded={expandedChangelog === changelog.id}
+              />
+            </React.Fragment>
           ))}
         </List.AccordionGroup>
       )}
