@@ -7,7 +7,7 @@ import { ApiKeyService } from '../../services/ApiKey.Service';
 export const KeyDialog = () => {
   const theme = useTheme();
   const [value, setValue] = React.useState('');
-  const { apiKey, setApiKey } = React.useContext(StoreContext);
+  const { checking, apiKey, setApiKey } = React.useContext(StoreContext);
   const { showSnackbar } = React.useContext(SnackbarContext);
 
   const handleSave = async () => {
@@ -26,7 +26,7 @@ export const KeyDialog = () => {
 
   return (
     <Portal>
-      <Dialog visible={apiKey === null} dismissable={false}>
+      <Dialog visible={!checking && apiKey === null} dismissable={false}>
         <Dialog.Title>Einstellungen</Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium">

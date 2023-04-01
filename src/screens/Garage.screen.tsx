@@ -66,6 +66,7 @@ export const GarageScreen = () => {
             {activeVehicles.length > 0 ? (
               activeVehicles.map((vehicle, index, arr) => (
                 <Vehicle
+                  key={vehicle.id}
                   vehicle={vehicle}
                   isFirst={index === 0}
                   isLast={index === arr.length - 1}
