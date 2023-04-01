@@ -17,6 +17,7 @@ export class ApiKeyService {
 
   static async save(key: IStoreContext['apiKey']) {
     try {
+      if (key === null) return await AsyncStorage.removeItem(this.storageKey);
       await AsyncStorage.setItem(this.storageKey, key);
     } catch (err) {
       console.error(err);

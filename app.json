@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "A3PLI",
+    "slug": "A3PLI",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/dag-logo-panda-smoking.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/dag-logo-panda-smoking.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#fff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "permissions": ["NOTIFICATIONS"],
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 450000000,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/dag-logo-panda-smoking.png",
+        "backgroundColor": "#fff"
+      },
+      "package": "de.dulliag.A3RLRPGInfoapp"
+    },
+    "web": {
+      "favicon": "./assets/dag-logo-panda-smoking.png"
+    }
+  }
+}
