@@ -20,7 +20,7 @@ export const Phonebook: React.FC<PhonebookProps> = ({ phonebook }) => {
 
   return (
     <React.Fragment>
-      <View>
+      <View style={{ marginTop: 16 }}>
         <View style={{ display: 'flex', flexDirection: 'row', paddingHorizontal: 16, columnGap: 16 }}>
           <View>
             <Avatar.Text label={phonebook.identity.name.slice(0, 2).toUpperCase()} />

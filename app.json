@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/dag-logo-panda-smoking.png",
       "resizeMode": "contain",
-      "backgroundColor": "#fff"
+      "backgroundColor": "#2A2A15"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,7 +23,7 @@
       "versionCode": 450000000,
       "adaptiveIcon": {
         "foregroundImage": "./assets/dag-logo-panda-smoking.png",
-        "backgroundColor": "#fff"
+        "backgroundColor": "#2A2A15"
       },
       "package": "de.tklein1801.a3pli"
     },

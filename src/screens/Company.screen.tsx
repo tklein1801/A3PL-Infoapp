@@ -1,16 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator, Card, List } from 'react-native-paper';
 import { Company } from '../components/Company/Company.component';
 import { Layout } from '../components/Layout/Layout.component';
 import { NoResults } from '../components/NoResults/NoResults.component';
 import { StoreContext } from '../context/Store.context';
 import { PanthorService } from '../services';
-import { Company as CompanyModel, Profile } from '../types';
+import { Company as CompanyModel } from '../types';
 
 export const CompanyScreen = () => {
-  const { apiKey, loading, setLoading, refreshing, setRefreshing, profile, setProfile } =
-    React.useContext(StoreContext);
+  const { apiKey, loading, setLoading, refreshing, setRefreshing } = React.useContext(StoreContext);
   const [companies, setCompanies] = React.useState<CompanyModel[]>([]);
   const [currentCompany, setCurrentCompany] = React.useState<CompanyModel['id'] | null>(null);
 

@@ -31,6 +31,7 @@ export const TraderOffers: React.FC<TraderOffersProps> = ({ shop, isFirst, isExp
       isLast={isLast}
       isExpanded={isExpanded}
       surfaceStyle={{ paddingHorizontal: 0, paddingVertical: 0 }}
+      divider
     >
       {loading ? (
         <View style={{ padding: 16 }}>
