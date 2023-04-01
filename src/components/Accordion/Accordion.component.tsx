@@ -72,7 +72,7 @@ export const Accordion: React.FC<AccordionProps> = ({
       >
         <Surface style={mergedSurfaceStyle}>{children}</Surface>
       </List.Accordion>
-      {!isFirst && divider && <Divider />}
+      {!isLast && divider && <Divider />}
     </React.Fragment>
   );
 };
