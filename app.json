@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/dag-logo-panda-smoking.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/dag-logo-panda-smoking.png",
       "resizeMode": "contain",
@@ -20,16 +20,20 @@
     },
     "android": {
       "permissions": ["NOTIFICATIONS"],
-      "googleServicesFile": "./google-services.json",
       "versionCode": 450000000,
       "adaptiveIcon": {
         "foregroundImage": "./assets/dag-logo-panda-smoking.png",
         "backgroundColor": "#fff"
       },
-      "package": "de.dulliag.A3RLRPGInfoapp"
+      "package": "de.tklein1801.a3pli"
     },
     "web": {
       "favicon": "./assets/dag-logo-panda-smoking.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3c7dea6a-7fbb-40e6-b9cb-8b130245d2c9"
+      }
     }
   }
 }
