@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Avatar, Chip, Divider, List, TextInput, useTheme } from 'react-native-paper';
+import { Avatar, Chip, Divider, List, Searchbar } from 'react-native-paper';
 import { Phonebook as PhonebookModel, Profile } from '../../types';
 import { Accordion } from '../Accordion/Accordion.component';
 import { LabelValue } from '../LabelValue/LabelValue.component';
@@ -11,7 +11,6 @@ export interface PhonebookProps {
 }
 
 export const Phonebook: React.FC<PhonebookProps> = ({ phonebook }) => {
-  const theme = useTheme();
   const [keyword, setKeyword] = React.useState('');
   const shownContacts = React.useMemo(() => {
     if (keyword.length < 1) return phonebook.phonebook;
@@ -39,13 +38,7 @@ export const Phonebook: React.FC<PhonebookProps> = ({ phonebook }) => {
       </View>
 
       <View style={{ paddingHorizontal: 16, paddingVertical: 8 }}>
-        <TextInput
-          mode="outlined"
-          label="Suchen"
-          value={keyword}
-          onChangeText={(text) => setKeyword(text)}
-          style={{ backgroundColor: theme.colors.elevation.level1 }}
-        />
+        <Searchbar mode="bar" placeholder="Suchen" value={keyword} onChangeText={setKeyword} />
       </View>
 
       <List.Section>

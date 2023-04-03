@@ -32,7 +32,7 @@ export const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
               source={{
                 uri: profile.avatar_full,
               }}
-              size={50}
+              size={64}
               style={{ marginRight: 16 }}
             />
             <View style={{ display: 'flex', flexDirection: 'column' }}>

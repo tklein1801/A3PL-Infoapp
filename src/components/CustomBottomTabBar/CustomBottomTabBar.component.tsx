@@ -7,7 +7,6 @@ export const CustomBottomTabBar: React.FC<BottomTabBarProps> = ({ navigation, st
   return (
     <BottomNavigation.Bar
       theme={theme}
-      style={{ backgroundColor: theme.colors.elevation.level2 }}
       navigationState={state}
       safeAreaInsets={insets}
       onTabPress={({ route }) => navigation.navigate(route.name)}

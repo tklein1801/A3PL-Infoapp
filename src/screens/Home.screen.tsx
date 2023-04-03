@@ -55,8 +55,12 @@ export const HomeScreen = () => {
             <ActivityIndicator animating={true} />
           </Card>
         ) : (
-          servers.map((server) => (
-            <ServerComponent key={id + '-server-' + server.id} server={server} onPress={handler.onCardPress} />
+          servers.map((server, idx, arr) => (
+            <ServerComponent
+              key={id + '-server-' + server.id}
+              server={server}
+              onPress={arr.length > 1 ? handler.onCardPress : undefined}
+            />
           ))
         )}
       </View>

@@ -6,12 +6,12 @@ import { RpgServer, Server as ServerType } from '../../types';
 export type ServerProps = {
   cardStyle?: CardProps['style'];
   server: RpgServer | ServerType;
-  onPress: (server: ServerProps['server']) => void;
+  onPress?: (server: ServerProps['server']) => void;
 };
 
 export const Server: React.FC<ServerProps> = ({ server, onPress, cardStyle }) => {
   return (
-    <Card style={cardStyle} onPress={() => onPress(server)}>
+    <Card style={cardStyle} onPress={onPress ? () => onPress(server) : undefined}>
       <Card.Title title={server.servername} subtitle={`Online: ${server.players.length}/${server.slots}`} />
       <Card.Content style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {server instanceof RpgServer ? (

@@ -27,6 +27,7 @@ export const SettingsScreen = () => {
 
   const handleSave = async () => {
     try {
+      if (value === apiKey) return;
       if (value.length === 0) return showSnackbar({ message: 'API-Key fehlt' });
       const valid = await ApiKeyService.validate(value);
       if (!valid) return showSnackbar({ message: 'Ungültiger API-Key' });

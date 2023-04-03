@@ -14,12 +14,7 @@ export const Vehicle: React.FC<VehicleProps> = ({ vehicle, isFirst, isLast, isEx
     <Accordion
       id={vehicle.id}
       title={vehicle.vehicle_data.name}
-      description={
-        <View>
-          {vehicle.active && <Chip style={{ marginRight: 8 }}>Ausgeparkt</Chip>}
-          <Chip>{vehicle.getVehicleTypeLabel()}</Chip>
-        </View>
-      }
+      description={vehicle.getVehicleTypeLabel()}
       isFirst={isFirst}
       isLast={isLast}
       isExpanded={isExpanded}
