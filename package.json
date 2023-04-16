@@ -41,7 +41,8 @@
     "web": "expo start --web",
     "build:android": "eas build -p android --profile prod",
     "build:playStore": "eas build -p android --profile production",
-    "build:ios": "eas build -p ios"
+    "build:ios": "eas build -p ios",
+    "release": "standard-version"
   },
   "version": "1.0.0",
   "private": true,
