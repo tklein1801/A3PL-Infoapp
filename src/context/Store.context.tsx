@@ -1,7 +1,7 @@
 import React from 'react';
 import { PanthorService } from '../services';
 import { ApiKeyService } from '../services/ApiKey.Service';
-import { Profile } from '../types';
+import type { Profile, RpgServer, Server } from '../types';
 
 type StoreContextDispatch<K extends keyof IStoreContext> = React.Dispatch<React.SetStateAction<IStoreContext[K]>>;
 
@@ -17,6 +17,8 @@ export interface IStoreContext {
   setApiKey: StoreContextDispatch<'apiKey'>;
   profile: Profile | null;
   setProfile: StoreContextDispatch<'profile'>;
+  servers: RpgServer[] | Server[];
+  setServers: StoreContextDispatch<'servers'>;
 }
 
 export const StoreContext = React.createContext({} as IStoreContext);
@@ -27,6 +29,7 @@ export const StoreProvider: React.FC<React.PropsWithChildren> = ({ children }) =
   const [refreshing, setRefreshing] = React.useState(false);
   const [apiKey, setApiKey] = React.useState<IStoreContext['apiKey']>(null);
   const [profile, setProfile] = React.useState<IStoreContext['profile']>(null);
+  const [servers, setServers] = React.useState<IStoreContext['servers']>([]);
 
   React.useLayoutEffect(() => {
     setChecking(true);
@@ -63,8 +66,10 @@ export const StoreProvider: React.FC<React.PropsWithChildren> = ({ children }) =
           setApiKey,
           profile,
           setProfile,
+          servers,
+          setServers,
         }),
-        [loading, refreshing, checking, apiKey, profile]
+        [loading, refreshing, checking, apiKey, profile, servers]
       )}
     >
       {children}

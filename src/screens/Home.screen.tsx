@@ -4,14 +4,15 @@ import { ActivityIndicator, Card } from 'react-native-paper';
 import { Layout } from '../components/Layout/Layout.component';
 import { Playerlist } from '../components/Playerlist/Playerlist.component';
 import { Server as ServerComponent, ServerProps } from '../components/Server/Server.component';
+import { StoreContext } from '../context/Store.context';
 import { PanthorService } from '../services';
 import { RpgServer, Server } from '../types';
 
 export const HomeScreen = () => {
   const id = React.useId();
+  const { servers, setServers } = React.useContext(StoreContext);
   const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [servers, setServers] = React.useState([]);
   const [selectedServer, setSelectedServer] = React.useState<RpgServer | Server | null>(null);
 
   const playerList = React.useMemo(() => {
