@@ -7,10 +7,10 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v3
 
-      # - name: Create `google-services.json`
-      #   env:
-      #     DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-      #   run: echo $DATA > /home/runner/work/A3PLI/A3PLI/google-services.json
+      - name: Create `google-services.json`
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA > /home/runner/work/A3PLI/A3PLI/google-services.json
 
       - name: Use Node.js 16
         uses: actions/setup-node@v2-beta

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
+import { View } from 'react-native';
+import { ActivityIndicator, Button, Card, Divider, Switch, Text, TextInput, useTheme } from 'react-native-paper';
 import { expo } from '../../app.json';
 import { LabelValue } from '../components/LabelValue/LabelValue.component';
 import { Layout } from '../components/Layout/Layout.component';
@@ -7,25 +8,27 @@ import { Panthor } from '../constants';
 import { SnackbarContext } from '../context/Snackbar.context';
 import { StoreContext } from '../context/Store.context';
 import { ApiKeyService } from '../services/ApiKey.Service';
+import { NotificationService } from '../services/Notification.service';
 
 export const SettingsScreen = () => {
   const theme = useTheme();
-  const { apiKey, setApiKey } = React.useContext(StoreContext);
-  const [value, setValue] = React.useState(apiKey);
+  const { loading, setLoading, apiKey, setApiKey } = React.useContext(StoreContext);
   const { showSnackbar } = React.useContext(SnackbarContext);
+  const [value, setValue] = React.useState(apiKey);
+  const [enablePushNotifications, setEnablePushNotifications] = React.useState(false);
 
-  const handleDelete = async () => {
+  const handleKeyDelete = async () => {
     try {
       await ApiKeyService.save(null);
       setApiKey(null);
       showSnackbar({ message: 'API-Key gelöscht' });
     } catch (error) {
       console.error(error);
-      showSnackbar({ message: 'Löschen fehlgeschlagen', action: { label: 'Erneut', onPress: handleSave } });
+      showSnackbar({ message: 'Löschen fehlgeschlagen', action: { label: 'Erneut', onPress: handleKeySave } });
     }
   };
 
-  const handleSave = async () => {
+  const handleKeySave = async () => {
     try {
       if (value === apiKey) return;
       if (value.length === 0) return showSnackbar({ message: 'API-Key fehlt' });
@@ -36,9 +39,44 @@ export const SettingsScreen = () => {
       showSnackbar({ message: 'API-Key gespeichert' });
     } catch (error) {
       console.error(error);
-      showSnackbar({ message: 'Speichern fehlgeschlagen', action: { label: 'Erneut', onPress: handleSave } });
+      showSnackbar({ message: 'Speichern fehlgeschlagen', action: { label: 'Erneut', onPress: handleKeySave } });
     }
   };
+
+  const handleSwitchChange = async (value: boolean) => {
+    const alreadySaved = await NotificationService.getLocalSavedState();
+    const deviceToken = await NotificationService.getDevicePushToken();
+
+    try {
+      // Check if the key needs to get registered or updated
+      const result = await (alreadySaved === null && value
+        ? NotificationService.register(deviceToken)
+        : NotificationService.update(deviceToken, value));
+
+      await NotificationService.setLocalSavedState(value);
+      setEnablePushNotifications((prev) => !prev);
+      showSnackbar({ message: value ? 'Push-Benachrichtigungen aktiviert' : 'Push-Benachrichtigungen deaktiviert' });
+    } catch (error) {
+      console.error(error);
+      showSnackbar({
+        message: 'Ändern der Einstellung fehlgeschlagen',
+        action: {
+          label: 'Wiederholen',
+          onPress: () => handleSwitchChange(value),
+        },
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    setLoading(true);
+    NotificationService.getLocalSavedState()
+      .then((value) => {
+        if (value !== null) setEnablePushNotifications(value);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <Layout>
@@ -57,13 +95,35 @@ export const SettingsScreen = () => {
           />
         </Card.Content>
         <Card.Actions>
-          <Button mode="text" onPress={handleDelete}>
+          <Button mode="text" onPress={handleKeyDelete}>
             Löschen
           </Button>
-          <Button mode="contained" onPress={handleSave}>
+          <Button mode="contained" onPress={handleKeySave}>
             Speichern
           </Button>
         </Card.Actions>
+
+        <Card.Content>
+          <Divider />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: loading ? 'center' : 'space-between',
+              marginTop: 8,
+            }}
+          >
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <React.Fragment>
+                <Text variant="labelLarge">Push-Benachrichtigungen</Text>
+                <Switch value={enablePushNotifications} onValueChange={handleSwitchChange} />
+              </React.Fragment>
+            )}
+          </View>
+        </Card.Content>
       </Card>
 
       <Card style={{ marginBottom: 16 }}>
