@@ -10,7 +10,7 @@ export const ItemBonus: React.FC<{ copAmount: number }> = ({ copAmount }) => {
   return (
     <StatsCard
       icon="cash-plus"
-      title={`${bonus > 1 && '+'} ${Math.round(bonus * 100 - 100)}%`}
+      title={`${bonus > 1 ? '+' : ''} ${Math.round(bonus * 100 - 100)}%`}
       subtitle="Polizei Bonus"
     />
   );
