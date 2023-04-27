@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
+import Device from 'expo-device';
+import Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
 export type KleithorApiResponse<T = undefined> = {
@@ -19,8 +19,7 @@ export type KleithorDeviceTokenResponse = {
 
 export class NotificationService {
   static asyncStorageKey = 'a3pli.pushNotifications';
-  private static apiHost = process.env.API_HOST;
-  private static apiAuthorizationKey = process.env.API_AUTHORIZATION_KEY;
+  private static apiHost = 'https://backend.tklein.it';
 
   static async getLocalSavedState(): Promise<boolean | null> {
     const result = await AsyncStorage.getItem(this.asyncStorageKey);

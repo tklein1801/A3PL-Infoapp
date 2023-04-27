@@ -49,9 +49,11 @@ export const SettingsScreen = () => {
 
     try {
       // Check if the key needs to get registered or updated
-      const result = await (alreadySaved === null && value
+      const response = await (alreadySaved === null && value
         ? NotificationService.register(deviceToken)
         : NotificationService.update(deviceToken, value));
+
+      if (response.status !== 200) alert("Couldn't update notification-state");
 
       await NotificationService.setLocalSavedState(value);
       setEnablePushNotifications((prev) => !prev);
