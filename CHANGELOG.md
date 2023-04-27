@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/tklein1801/A3PLI/compare/v1.2.0...v1.2.1) (2023-04-27)
+
+
+### Bug Fixes
+
+* Use valid service url ([7b242ef](https://github.com/tklein1801/A3PLI/commit/7b242ef378669d74a1fcedb3d1cdb5e8b8f7d8f8))
+
 ## [1.2.0](https://github.com/tklein1801/A3PLI/compare/v1.1.0...v1.2.0) (2023-04-23)
 
 

@@ -2,7 +2,7 @@
   "expo": {
     "name": "A3PLI",
     "slug": "A3PLI",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/dag-logo-panda-smoking.png",
     "userInterfaceStyle": "dark",
@@ -25,7 +25,7 @@
         "NOTIFICATIONS"
       ],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 480010200,
+      "versionCode": 480010201,
       "adaptiveIcon": {
         "foregroundImage": "./assets/dag-logo-panda-smoking.png",
         "backgroundColor": "#2A2A15"
