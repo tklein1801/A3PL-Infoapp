@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Device from 'expo-device';
-import Notifications from 'expo-notifications';
+import axios, { AxiosRequestConfig } from 'axios';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
 export type KleithorApiResponse<T = undefined> = {
@@ -32,7 +33,7 @@ export class NotificationService {
 
   static async getExpoPushToken() {
     let token = '';
-    if (Device.isDevice) {
+    if (Device !== undefined && Device.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
@@ -44,23 +45,24 @@ export class NotificationService {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
+
+      if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
+      }
     } else {
       alert('Must use physical device for Push Notifications');
-    }
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
     }
     return token;
   }
 
   static async getDevicePushToken() {
     let token = '';
-    if (Device.isDevice) {
+    if (Device !== undefined && Device.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
@@ -72,58 +74,57 @@ export class NotificationService {
         return;
       }
       token = (await Notifications.getDevicePushTokenAsync()).data;
+
+      if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
+      }
     } else {
       alert('Must use physical device for Push Notifications');
     }
-
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-
     return token;
   }
 
   static async register(deviceToken: string) {
     try {
-      const req = await fetch('https://backend.tklein.it/v1/infoapp/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: deviceToken }),
-      });
-      const res = (await req.json()) as unknown as KleithorApiResponse<KleithorDeviceTokenResponse>;
+      const body = {
+        token: deviceToken,
+      };
+      const options: AxiosRequestConfig = {
+        headers: { 'Content-Type': 'application/json' },
+      };
+      const req = await axios.post(this.apiHost + '/v1/infoapp/', body, options);
+      const res = (await req.data) as unknown as KleithorApiResponse<KleithorDeviceTokenResponse>;
       if (res.status >= 200 && res.status < 300) {
         return res;
       } else throw new Error("Couldn't update the device token");
     } catch (error) {
       console.error(error);
+      alert(error);
     }
   }
 
   static async update(deviceToken: string, enabled: boolean = true) {
     try {
-      const req = await fetch(this.apiHost + '/v1/infoapp/', {
-        method: 'POST', // PUT for actual update endpoint (which required authentification)
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: deviceToken,
-          active: enabled,
-        }),
-      });
-      const res = (await req.json()) as unknown as KleithorApiResponse<KleithorDeviceTokenResponse>;
+      const body = {
+        token: deviceToken,
+        active: enabled,
+      };
+      const options: AxiosRequestConfig = {
+        headers: { 'Content-Type': 'application/json' },
+      };
+      const req = await axios.post(this.apiHost + '/v1/infoapp/', body, options);
+      const res = (await req.data) as unknown as KleithorApiResponse<KleithorDeviceTokenResponse>;
       if (res.status >= 200 && res.status < 300) {
         return res;
       } else throw new Error("Couldn't update the device token");
     } catch (error) {
       console.error(error);
+      alert(error);
     }
   }
 }

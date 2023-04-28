@@ -52,7 +52,6 @@ export const SettingsScreen = () => {
       const response = await (alreadySaved === null && value
         ? NotificationService.register(deviceToken)
         : NotificationService.update(deviceToken, value));
-
       if (response.status !== 200) alert("Couldn't update notification-state");
 
       await NotificationService.setLocalSavedState(value);
