@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/tklein1801/A3PLI/compare/v1.2.0...v1.2.2) (2023-04-28)
+
+
+### Bug Fixes
+
+* Use axios for requests and proper imports ([6b63f2c](https://github.com/tklein1801/A3PLI/commit/6b63f2cbbeae7957a288ae5f3f38daa78a783e50))
+* Use valid service url ([7e087ca](https://github.com/tklein1801/A3PLI/commit/7e087cab3a8debcd8e2102c80a28d3d7cc7b20b1))
+
 ### [1.2.1](https://github.com/tklein1801/A3PLI/compare/v1.2.0...v1.2.1) (2023-04-27)
 
 

@@ -46,7 +46,7 @@
     "build:ios": "eas build -p ios",
     "release": "standard-version"
   },
-  "version": "1.2.1",
+  "version": "1.2.2",
   "private": true,
   "name": "a3pli"
 }
