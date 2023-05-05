@@ -1,6 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
 import { ActivityIndicator, Card } from 'react-native-paper';
+import { HorizontalCardList } from '../components/Card/HorizontalCardList.component';
 import { Layout } from '../components/Layout/Layout.component';
 import { Playerlist } from '../components/Playerlist/Playerlist.component';
 import { Server as ServerComponent, ServerProps } from '../components/Server/Server.component';
@@ -50,21 +50,23 @@ export const HomeScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
-      <View style={{ marginBottom: 16 }}>
-        {loading ? (
-          <Card elevation={1} style={{ padding: 16 }}>
-            <ActivityIndicator animating={true} />
-          </Card>
-        ) : (
-          servers.map((server, idx, arr) => (
+      {loading ? (
+        <Card elevation={1} style={{ padding: 16 }}>
+          <ActivityIndicator animating={true} />
+        </Card>
+      ) : (
+        <HorizontalCardList
+          // Maybe we don't wanna change the displayed player-list on every card-scroll
+          // onScroll={(curIdx) => handler.onCardPress(servers[curIdx])}
+          cards={servers.map((server, idx, arr) => (
             <ServerComponent
               key={id + '-server-' + server.id}
               server={server}
               onPress={arr.length > 1 ? handler.onCardPress : undefined}
             />
-          ))
-        )}
-      </View>
+          ))}
+        />
+      )}
 
       {selectedServer ? <Playerlist players={playerList} /> : null}
     </Layout>
