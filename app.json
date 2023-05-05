@@ -9,26 +9,22 @@
     "splash": {
       "image": "./assets/dag-logo-panda-smoking.png",
       "resizeMode": "contain",
-      "backgroundColor": "#2A2A15"
+      "backgroundColor": "#1a1b1e"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "permissions": [
-        "NOTIFICATIONS"
-      ],
+      "permissions": ["NOTIFICATIONS"],
       "googleServicesFile": "./google-services.json",
       "versionCode": 480010202,
       "adaptiveIcon": {
         "foregroundImage": "./assets/dag-logo-panda-smoking.png",
-        "backgroundColor": "#2A2A15"
+        "backgroundColor": "#1a1b1e"
       },
       "package": "de.tklein1801.a3pli"
     },
