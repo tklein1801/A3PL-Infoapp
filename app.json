@@ -2,7 +2,7 @@
   "expo": {
     "name": "A3PLI",
     "slug": "A3PLI",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "orientation": "portrait",
     "icon": "./assets/dag-logo-panda-smoking.png",
     "userInterfaceStyle": "dark",
@@ -14,14 +14,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "permissions": ["NOTIFICATIONS"],
+      "permissions": [
+        "NOTIFICATIONS"
+      ],
       "googleServicesFile": "./google-services.json",
-      "versionCode": 480010202,
+      "versionCode": 480010203,
       "adaptiveIcon": {
         "foregroundImage": "./assets/dag-logo-panda-smoking.png",
         "backgroundColor": "#1a1b1e"

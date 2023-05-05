@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://github.com/tklein1801/A3PLI/compare/v1.2.2...v1.2.3) (2023-05-05)
+
+
+### Bug Fixes
+
+* **#2:** Remove duplicate require-cycles ([e6691d7](https://github.com/tklein1801/A3PLI/commit/e6691d7baa6e5edbfc64fef39e85b568db84dffb)), closes [#2](https://github.com/tklein1801/A3PLI/issues/2)
+* **#7:** Show playtime in hours ([2c030ba](https://github.com/tklein1801/A3PLI/commit/2c030ba27f72d8a9c58f160b2b9f6d7513103a29)), closes [#7](https://github.com/tklein1801/A3PLI/issues/7)
+* Update initial loading-state ([0bd93c1](https://github.com/tklein1801/A3PLI/commit/0bd93c175eb4fb307f1c16d1c621bb3b51919b28))
+
 ### [1.2.2](https://github.com/tklein1801/A3PLI/compare/v1.2.0...v1.2.2) (2023-04-28)
 
 
