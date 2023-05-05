@@ -14,7 +14,11 @@ export const Rental: React.FC<RentalProps> = ({ rental, isFirst, isLast, isExpan
     <Accordion
       id={rental.id}
       title={'Haus ' + rental.id}
-      description={<View>{rental.disabled ? <Chip>Inaktiv</Chip> : <Chip>{rental.payed_for / 24} Tage</Chip>}</View>}
+      description={
+        <View>
+          {rental.disabled ? <Chip compact>Inaktiv</Chip> : <Chip compact>{rental.payed_for / 24} Tage</Chip>}
+        </View>
+      }
       isFirst={isFirst}
       isLast={isLast}
       isExpanded={isExpanded}

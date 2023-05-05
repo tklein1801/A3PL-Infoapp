@@ -23,15 +23,15 @@ export const Vehicle: React.FC<VehicleProps> = ({ vehicle, isFirst, isLast, isEx
       <View style={style.row}>
         <View style={style.col}>
           <Text variant="labelMedium">Fraktion</Text>
-          <Chip>{vehicle.side.getLabel()}</Chip>
+          <Chip compact>{vehicle.side.getLabel()}</Chip>
         </View>
         <View style={style.col}>
           <Text variant="labelMedium">Kennzeichen</Text>
-          <Chip>{vehicle.plate}</Chip>
+          <Chip compact>{vehicle.plate}</Chip>
         </View>
         <View style={style.col}>
           <Text variant="labelMedium">Kilometerstand</Text>
-          <Chip>{vehicle.kilometer_total} Km.</Chip>
+          <Chip compact>{vehicle.kilometer_total} Km.</Chip>
         </View>
         <View style={[style.col, { minWidth: '100%' }]}>
           <Text variant="labelMedium">Tank</Text>

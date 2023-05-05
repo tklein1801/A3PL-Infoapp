@@ -14,7 +14,9 @@ export const House: React.FC<HouseProps> = ({ house, isFirst, isLast, isExpanded
     <Accordion
       id={house.id}
       title={'Haus ' + house.id}
-      description={<View>{house.disabled ? <Chip>Inaktiv</Chip> : <Chip>{house.payed_for / 24} Tage</Chip>}</View>}
+      description={
+        <View>{house.disabled ? <Chip compact>Inaktiv</Chip> : <Chip compact>{house.payed_for / 24} Tage</Chip>}</View>
+      }
       isFirst={isFirst}
       isLast={isLast}
       isExpanded={isExpanded}
@@ -35,7 +37,7 @@ export const House: React.FC<HouseProps> = ({ house, isFirst, isLast, isExpanded
           <Text variant="labelMedium">Mitbewohner</Text>
           {house.players.length > 0 &&
             house.players.map((player) => (
-              <Chip key={player} style={{ marginRight: 8, marginBottom: 8 }}>
+              <Chip key={player} style={{ marginRight: 8, marginBottom: 8 }} compact>
                 {player}
               </Chip>
             ))}

@@ -32,7 +32,7 @@ export const Phonebook: React.FC<PhonebookProps> = ({ phonebook }) => {
 
           <View>
             <LabelValue label="Geburts" value={phonebook.identity.id_birthday.toString()} />
-            <LabelValue label="Fraktion" value={<Chip>{phonebook.identity.side.getLabel()}</Chip>} />
+            <LabelValue label="Fraktion" value={<Chip compact>{phonebook.identity.side.getLabel()}</Chip>} />
           </View>
         </View>
       </View>

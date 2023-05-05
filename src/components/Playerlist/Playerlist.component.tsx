@@ -11,7 +11,7 @@ export const Playerlist: React.FC<{ players: Server['players'] }> = ({ players }
       <Card.Content style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {players.length > 0 ? (
           players.map((player, index) => (
-            <Chip key={id + '-player-' + index + '-' + player} style={{ marginRight: 4, marginBottom: 4 }}>
+            <Chip key={id + '-player-' + index + '-' + player} style={{ marginRight: 4, marginBottom: 4 }} compact>
               {player}
             </Chip>
           ))
