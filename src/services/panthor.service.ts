@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Panthor } from '../constants/';
+import { Panthor } from '../constants/panthor.constant';
 import { Changelog, MarketItem, Profile, RpgServer, Server, ShopType, Vehicle } from '../types/';
 import type {
   ApiResponse,

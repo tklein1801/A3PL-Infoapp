@@ -1,4 +1,4 @@
-import { Panthor } from '../constants/';
+import { Panthor } from '../constants/panthor.constant';
 import type { ApiResponse } from './api_response';
 
 const ILLEGAL_ITEMS = [

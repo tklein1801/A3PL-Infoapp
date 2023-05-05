@@ -4,7 +4,7 @@ import { ActivityIndicator, Button, Card, Divider, Switch, Text, TextInput, useT
 import { expo } from '../../app.json';
 import { LabelValue } from '../components/LabelValue/LabelValue.component';
 import { Layout } from '../components/Layout/Layout.component';
-import { Panthor } from '../constants';
+import { Panthor } from '../constants/panthor.constant';
 import { SnackbarContext } from '../context/Snackbar.context';
 import { StoreContext } from '../context/Store.context';
 import { ApiKeyService } from '../services/ApiKey.Service';

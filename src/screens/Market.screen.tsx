@@ -6,8 +6,8 @@ import { Layout } from '../components/Layout/Layout.component';
 import { ItemBonus, PriceCalculation, PriceCalculationProps } from '../components/Market';
 import { Panthor } from '../constants';
 import { StoreContext } from '../context/Store.context';
-import { PanthorService } from '../services';
 import { formatter } from '../services/CurrencyFormat.service';
+import { PanthorService } from '../services/panthor.service';
 import { MarketItem, RpgServer } from '../types';
 
 export const MarketScreen = () => {

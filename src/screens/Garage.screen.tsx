@@ -4,7 +4,7 @@ import { Layout } from '../components/Layout/Layout.component';
 import { NoResults } from '../components/NoResults/NoResults.component';
 import { Vehicle } from '../components/Vehicle/Vehicle.component';
 import { StoreContext } from '../context/Store.context';
-import { PanthorService } from '../services';
+import { PanthorService } from '../services/panthor.service';
 import { Vehicle as VehicleModel } from '../types';
 
 export const GarageScreen = () => {
