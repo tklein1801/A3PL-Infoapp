@@ -69,8 +69,12 @@ export const PlayerProfile = () => {
             <LabelValue label="Kontostand (Hauptkonto)" value={formatter.format(profile.bankacc)} withDivider />
             <LabelValue label="XP" value={profile.exp.toLocaleString() + ' XP.'} withDivider />
             <LabelValue label="Skillpunkte" value={profile.skillpoint + ' Punkte'} withDivider />
-            <LabelValue label="Spielzeit" value={profile.play_time.active.toFixed(0) + ' Stunden'} withDivider />
-            <LabelValue label="Volle Spielzeit" value={profile.play_time.total.toFixed(0) + ' Stunden'} withDivider />
+            <LabelValue label="Spielzeit" value={(profile.play_time.active / 60).toFixed(0) + ' Stunden'} withDivider />
+            <LabelValue
+              label="Volle Spielzeit"
+              value={(profile.play_time.total / 60).toFixed(0) + ' Stunden'}
+              withDivider
+            />
             <LabelValue
               label="Zuletzt gesehen"
               value={format(profile.last_seen.date, 'dd.MM.yy, HH:mm') + ' Uhr'}
