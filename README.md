@@ -50,8 +50,6 @@ zu erhalten.
 </details>
 
 <details >
-
-<details >
 <summary>Widgets</summary>
 </details>
 

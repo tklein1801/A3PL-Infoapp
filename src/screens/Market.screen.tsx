@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import { ActivityIndicator, Avatar, Card, Divider, List, Text } from 'react-native-paper';
 import { Layout } from '../components/Layout/Layout.component';
 import { ItemBonus, PriceCalculation, PriceCalculationProps } from '../components/Market';
-import { Panthor } from '../constants';
 import { StoreContext } from '../context/Store.context';
 import { formatter } from '../services/CurrencyFormat.service';
 import { PanthorService } from '../services/panthor.service';
@@ -51,6 +50,7 @@ export const MarketScreen = () => {
   }, [servers]);
 
   React.useEffect(() => {
+    setLoading(true);
     handler.fetchData().finally(() => setLoading(false));
   }, []);
 
