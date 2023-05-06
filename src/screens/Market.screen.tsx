@@ -23,17 +23,14 @@ export const MarketScreen = () => {
   const handler = {
     fetchData: async () => {
       try {
-        Promise.all([PanthorService.getMarket(1), PanthorService.getServers()])
-          .then(async ([market, fetchedServers]) => {
-            const [newer, older] = await market[0].getPriceBacklog(1, 2);
-            setRefreshInterval({
-              date: newer.createdAt,
-              interval: differenceInSeconds(newer.createdAt, older.createdAt),
-            });
-            setItems(market);
-            setServers(fetchedServers);
-          })
-          .catch(console.error);
+        const [market, fetchedServers] = await Promise.all([PanthorService.getMarket(1), PanthorService.getServers()]);
+        const [newer, older] = await market[0].getPriceBacklog(1, 2);
+        setRefreshInterval({
+          date: newer.createdAt,
+          interval: differenceInSeconds(newer.createdAt, older.createdAt),
+        });
+        setItems(market);
+        setServers(fetchedServers);
       } catch (error) {
         console.error(error);
       }
