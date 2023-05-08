@@ -42,10 +42,10 @@ export class Company {
   created_by: string;
   created_at: Date;
   updated_at: Date;
-  bank_details?: {
+  bank_details: {
     bank_1: BankAccount;
     bank_2: BankAccount;
-  };
+  } | null;
   shops?: unknown[];
 
   constructor(data: CompanyResponse) {
@@ -65,21 +65,17 @@ export class Company {
     this.created_by = data.created_by;
     this.created_at = new Date(data.created_at);
     this.updated_at = new Date(data.updated_at);
-    if (data.bank_details) {
-      this.bank_details = {
-        bank_1: new BankAccount(data.bank_details.bank_1, data.name),
-        bank_2: new BankAccount(data.bank_details.bank_2, data.name),
-      };
-    }
+    this.bank_details = data.bank_details
+      ? {
+          bank_1: new BankAccount(data.bank_details.bank_1, data.name),
+          bank_2: new BankAccount(data.bank_details.bank_2, data.name),
+        }
+      : null;
     if (data.shops) this.shops = data.shops;
   }
 
   getBankAccounts(): BankAccount[] {
-    if (!this.bank_details) return [] as BankAccount[];
-    return Object.keys(this.bank_details).map(
-      (key) =>
-        // @ts-expect-error
-        this.bank_details[key]
-    );
+    if (this.bank_details === null) return [];
+    return Object.keys(this.bank_details).map((key) => this.bank_details[key]);
   }
 }

@@ -1,4 +1,17 @@
 {
+  "name": "a3pli",
+  "version": "1.2.3",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "build:android": "eas build -p android --profile prod",
+    "build:playStore": "eas build -p android --profile production",
+    "build:ios": "eas build -p ios",
+    "release": "standard-version"
+  },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
@@ -35,18 +48,5 @@
   "overrides": {
     "@expo/config-plugins": "~6.0.0",
     "@expo/prebuild-config": "~6.0.0"
-  },
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "build:android": "eas build -p android --profile prod",
-    "build:playStore": "eas build -p android --profile production",
-    "build:ios": "eas build -p ios",
-    "release": "standard-version"
-  },
-  "version": "1.2.3",
-  "private": true,
-  "name": "a3pli"
+  }
 }

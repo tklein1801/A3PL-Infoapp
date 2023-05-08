@@ -1,8 +1,8 @@
 import React from 'react';
 import { ActivityIndicator, Card, List } from 'react-native-paper';
-import { Company } from '../components/Company/Company.component';
-import { Layout } from '../components/Layout/Layout.component';
-import { NoResults } from '../components/NoResults/NoResults.component';
+import { Company } from '../components/Company';
+import { Layout } from '../components/Layout';
+import { NoResults } from '../components/NoResults';
 import { StoreContext } from '../context/Store.context';
 import { PanthorService } from '../services';
 import { Company as CompanyModel } from '../types';
@@ -50,21 +50,24 @@ export const CompanyScreen = () => {
         </Card>
       ) : (
         <React.Fragment>
-          <List.AccordionGroup expandedId={currentCompany} onAccordionPress={handler.onAccordionPress}>
-            {companies.length > 0 ? (
-              companies.map((company, index, arr) => (
-                <Company
-                  key={company.id}
-                  company={company}
-                  isFirst={index === 0}
-                  isLast={index === arr.length - 1}
-                  isExpanded={currentCompany === company.id}
-                />
-              ))
-            ) : (
-              <NoResults message="Keine Firmen gefunden" />
-            )}
-          </List.AccordionGroup>
+          <List.Section>
+            <List.Subheader style={{ fontSize: 16 }}>Eigene Firmen</List.Subheader>
+            <List.AccordionGroup expandedId={currentCompany} onAccordionPress={handler.onAccordionPress}>
+              {companies.length > 0 ? (
+                companies.map((company, index, arr) => (
+                  <Company
+                    key={company.id}
+                    company={company}
+                    isFirst={index === 0}
+                    isLast={index === arr.length - 1}
+                    isExpanded={currentCompany === company.id}
+                  />
+                ))
+              ) : (
+                <NoResults message="Keine Firmen gefunden" />
+              )}
+            </List.AccordionGroup>
+          </List.Section>
         </React.Fragment>
       )}
     </Layout>
