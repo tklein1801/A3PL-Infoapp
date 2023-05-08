@@ -2,7 +2,7 @@ import React from 'react';
 import { ActivityIndicator, Card, List } from 'react-native-paper';
 import { Layout } from '../components/Layout/Layout.component';
 import { TraderOffers } from '../components/TraderOffers/TraderOffers.component';
-import { PanthorService } from '../services/panthor.service';
+import { PanthorService } from '../services';
 import { ShopCategory, ShopType } from '../types';
 
 export type TraderScreenProps = {

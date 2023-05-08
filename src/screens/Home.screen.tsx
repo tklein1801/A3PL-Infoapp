@@ -5,7 +5,7 @@ import { Layout } from '../components/Layout/Layout.component';
 import { Playerlist } from '../components/Playerlist/Playerlist.component';
 import { Server as ServerComponent, ServerProps } from '../components/Server/Server.component';
 import { StoreContext } from '../context/Store.context';
-import { PanthorService } from '../services/panthor.service';
+import { PanthorService } from '../services';
 import { RpgServer, Server } from '../types';
 
 export const HomeScreen = () => {

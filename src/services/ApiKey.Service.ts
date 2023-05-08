@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IStoreContext } from '../context/Store.context';
-import { PanthorService } from './panthor.service';
+import { PanthorService } from './Panthor.service';
 
 export class ApiKeyService {
   private static storageKey = 'a3pli.api_key';

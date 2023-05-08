@@ -4,7 +4,7 @@ import { Company } from '../components/Company/Company.component';
 import { Layout } from '../components/Layout/Layout.component';
 import { NoResults } from '../components/NoResults/NoResults.component';
 import { StoreContext } from '../context/Store.context';
-import { PanthorService } from '../services/panthor.service';
+import { PanthorService } from '../services';
 import { Company as CompanyModel } from '../types';
 
 export const CompanyScreen = () => {

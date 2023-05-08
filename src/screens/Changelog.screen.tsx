@@ -2,7 +2,7 @@ import React from 'react';
 import { ActivityIndicator, Card, List } from 'react-native-paper';
 import { Changelog } from '../components/Changelog/Changelog.component';
 import { Layout } from '../components/Layout/Layout.component';
-import { PanthorService } from '../services/panthor.service';
+import { PanthorService } from '../services';
 import { Changelog as ChangelogModel } from '../types';
 
 export const ChangelogScreen = () => {

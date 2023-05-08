@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import React from 'react';
-import { CustomAppBar } from '../components/CustomAppBar/CustomAppBar.component';
-import { DrawerContent } from '../components/Drawer/DrawerContent.component';
+import { CustomAppBar } from '../components/CustomAppBar';
+import { DrawerContent } from '../components/Drawer';
 import { DrawerScreens } from '../constants/screens.constant';
 
 const Drawer = createDrawerNavigator();

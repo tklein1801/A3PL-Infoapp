@@ -1,6 +1,6 @@
 import React from 'react';
+import { PanthorService } from '../services';
 import { ApiKeyService } from '../services/ApiKey.Service';
-import { PanthorService } from '../services/panthor.service';
 import type { Profile, RpgServer, Server } from '../types';
 
 type StoreContextDispatch<K extends keyof IStoreContext> = React.Dispatch<React.SetStateAction<IStoreContext[K]>>;

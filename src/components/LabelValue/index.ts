@@ -1,0 +1,1 @@
+export * from './LabelValue.component';

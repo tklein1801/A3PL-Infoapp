@@ -3,7 +3,7 @@ import { ActivityIndicator, Card } from 'react-native-paper';
 import { Layout } from '../components/Layout/Layout.component';
 import { PhonebookWrapper } from '../components/Phonebook/Phonebook.component';
 import { StoreContext } from '../context/Store.context';
-import { PanthorService } from '../services/panthor.service';
+import { PanthorService } from '../services';
 
 export const ContactsScreen = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing, profile, setProfile } =

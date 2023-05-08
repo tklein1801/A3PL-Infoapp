@@ -5,8 +5,8 @@ import { LabelValue } from '../components/LabelValue/LabelValue.component';
 import { Layout } from '../components/Layout/Layout.component';
 import { Progress } from '../components/Progress/Progress.component';
 import { StoreContext } from '../context/Store.context';
+import { PanthorService } from '../services';
 import { formatter } from '../services/CurrencyFormat.service';
-import { PanthorService } from '../services/panthor.service';
 
 export const PlayerProfile = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing, profile, setProfile } =
