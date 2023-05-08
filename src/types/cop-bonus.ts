@@ -38,4 +38,8 @@ export class CopBonus {
   calculatePrice(currentMarketPrice: number) {
     return Math.round(currentMarketPrice * this.determineMultiplicator());
   }
+
+  static calculatePrice(currentMarketPrice: number, multiplicator: number) {
+    return Math.round(currentMarketPrice * multiplicator);
+  }
 }
