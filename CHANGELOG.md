@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/tklein1801/A3PLI/compare/v1.2.3...v1.3.0) (2023-05-09)
+
+
+### Features
+
+* Show cop-bonus ([2e63160](https://github.com/tklein1801/A3PLI/commit/2e6316024467c58698ee9218e5504580ff7c91cb))
+
 ### [1.2.3](https://github.com/tklein1801/A3PLI/compare/v1.2.2...v1.2.3) (2023-05-05)
 
 
