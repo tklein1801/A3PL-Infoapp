@@ -20,17 +20,18 @@ export const Icon: React.FC<IconProps> = ({ icon, size = IconSize.medium, style 
   const theme = useTheme();
   return (
     <View
-      style={{
-        width: size,
-        height: size,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: hexToRgba(rgbStringToHex(theme.colors.primary), 0.2),
-        borderRadius: theme.roundness,
-        // @ts-ignore
-        ...style,
-      }}
+      style={[
+        {
+          width: size,
+          height: size,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: hexToRgba(rgbStringToHex(theme.colors.primary), 0.2),
+          borderRadius: theme.roundness,
+        },
+        style,
+      ]}
     >
       <List.Icon icon={icon} color={theme.colors.primary} />
     </View>

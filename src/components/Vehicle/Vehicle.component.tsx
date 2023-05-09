@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Chip, Text } from 'react-native-paper';
-import { Vehicle as VehicleModel } from '../../types';
-import { Accordion, AccordionProps } from '../Accordion/Accordion.component';
+import { Vehicle as CVehicle } from '../../types';
+import { Accordion, AccordionProps } from '../Accordion';
 import { Progress } from '../Progress/Progress.component';
 
 export type VehicleProps = {
-  vehicle: VehicleModel;
+  vehicle: CVehicle;
 } & Pick<AccordionProps, 'isFirst' | 'isLast' | 'isExpanded'>;
 
 export const Vehicle: React.FC<VehicleProps> = ({ vehicle, isFirst, isLast, isExpanded }) => {

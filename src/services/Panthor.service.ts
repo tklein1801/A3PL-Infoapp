@@ -14,8 +14,13 @@ import type {
   ValidSecretResponse,
   VehicleResponse,
 } from '../types';
+import { ServiceResponse, TServiceResponse, handleServiceError } from './ServiceResponse';
 
 export class PanthorService {
+  static options = {
+    timeout: 2 * 1000,
+  };
+
   static async validateSecret(apiKey: string): Promise<Boolean> {
     try {
       const response = await axios.get(Panthor.apiBaseUrl + '/v1/player/validate/' + apiKey);
@@ -29,8 +34,8 @@ export class PanthorService {
 
   static async getProfile(apiKey: string): Promise<Profile | null> {
     try {
-      const response = await axios.get(Panthor.apiBaseUrl + '/v1/player/' + apiKey);
-      const json: ApiResponse<ProfileResponse> = await response.data;
+      const response = await axios.get<ApiResponse<ProfileResponse>>(Panthor.apiBaseUrl + '/v1/player/' + apiKey);
+      const json = await response.data;
       if (response.status !== 200 || json.data === undefined) throw new Error(JSON.stringify(json));
       return new Profile(json.data[0]);
     } catch (message) {
@@ -61,18 +66,17 @@ export class PanthorService {
     }
   }
 
-  static async getServers(): Promise<RpgServer[] | Server[]> {
+  static async getServers(): Promise<TServiceResponse<RpgServer[] | Server[]>> {
     try {
-      const response = await axios.get(Panthor.apiBaseUrl + '/v1/servers');
-      const json: ApiResponse<RpgServerResponse | ServerResponse> = await response.data;
-      return [
+      const response = await axios.get(Panthor.apiBaseUrl + '/v1/servers', this.options);
+      const json = await response.data;
+      return ServiceResponse([
         ...json.data.map((server) =>
           server.Id < 16 ? new RpgServer(server as RpgServerResponse) : new Server(server as ServerResponse)
         ),
-      ];
-    } catch (message) {
-      console.error(message);
-      return [];
+      ]);
+    } catch (error) {
+      return handleServiceError([], error);
     }
   }
 

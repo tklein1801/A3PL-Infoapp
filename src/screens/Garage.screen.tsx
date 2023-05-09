@@ -1,16 +1,16 @@
 import React from 'react';
 import { ActivityIndicator, Card, List } from 'react-native-paper';
-import { Layout } from '../components/Layout/Layout.component';
-import { NoResults } from '../components/NoResults/NoResults.component';
-import { Vehicle } from '../components/Vehicle/Vehicle.component';
+import { Layout } from '../components/Layout';
+import { NoResults } from '../components/NoResults';
+import { Vehicle } from '../components/Vehicle';
 import { StoreContext } from '../context/Store.context';
 import { PanthorService } from '../services';
-import { Vehicle as VehicleModel } from '../types';
+import { Vehicle as CVehicle } from '../types';
 
 export const GarageScreen = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing } = React.useContext(StoreContext);
-  const [vehicles, setVehicles] = React.useState<VehicleModel[]>([]);
-  const [currentVehicle, setCurrentVehicle] = React.useState<VehicleModel['id'] | null>(null);
+  const [vehicles, setVehicles] = React.useState<CVehicle[]>([]);
+  const [currentVehicle, setCurrentVehicle] = React.useState<CVehicle['id'] | null>(null);
 
   const activeVehicles = React.useMemo(() => {
     return vehicles
