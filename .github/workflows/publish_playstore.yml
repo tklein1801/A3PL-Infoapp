@@ -1,11 +1,12 @@
-name: Google Play Store Build
+name: Publish Google Play Store Build
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [build_aab, publish_playstore]
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
-  #   branches: ['master']
 
 jobs:
   build:
@@ -23,7 +24,7 @@ jobs:
       - name: Use Node.js 16
         uses: actions/setup-node@v2-beta
         with:
-          node-version: '16.13'
+          node-version: '16'
 
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v7
@@ -36,7 +37,15 @@ jobs:
         run: npm install
 
       - name: 🚀 Build app
+        id: build
         run: eas build -p android --profile production
 
+      - name: 🔼 Upload Artifact if build successful
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Build Artifact'
+          path: /home/runner/work/A3PLI/A3PLI/build-*.aab
+
       - name: 🎉 Submit app
-        run: eas submit -p android --profile production --latest
+        run: eas submit -p android --profile production --path=/home/runner/work/A3PLI/A3PLI/build-*.aab
