@@ -2,7 +2,8 @@ import React from 'react';
 import { ActivityIndicator, Card } from 'react-native-paper';
 import { HorizontalCardList } from '../components/Card';
 import { Layout } from '../components/Layout';
-import { NoResults } from '../components/NoResults';
+import { NoResults, isReason } from '../components/NoResults';
+import type { Reason } from '../components/NoResults';
 import { Playerlist } from '../components/Playerlist';
 import { Server as ServerComponent, ServerProps } from '../components/Server';
 import { StoreContext } from '../context/Store.context';
@@ -28,7 +29,7 @@ export const HomeScreen = () => {
   const handler = {
     fetchData: async () => {
       const { data, error, errorReason } = await PanthorService.getServers();
-      if (error) setError({ error, errorReason });
+      setError({ error, errorReason });
       setServers(data);
       setSelectedServer(data[0] || null);
     },
@@ -53,6 +54,19 @@ export const HomeScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
+      {error.error || error.errorReason ? (
+        <NoResults
+          reason={
+            error.errorReason
+              ? error.errorReason
+              : isReason(error.error.message)
+              ? (error.error.message as Reason)
+              : 'UNKNOWN_ERROR'
+          }
+          style={{ marginBottom: 16 }}
+        />
+      ) : null}
+
       {loading ? (
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
@@ -70,7 +84,7 @@ export const HomeScreen = () => {
           ))}
         />
       ) : (
-        <NoResults reason={servers.length > 0 && !error.errorReason ? 'NO_RESULTS' : error.errorReason} />
+        <NoResults reason="NO_RESULTS" />
       )}
 
       {servers.length > 0 && selectedServer ? <Playerlist players={playerList} /> : null}

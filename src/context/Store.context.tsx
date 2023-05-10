@@ -43,7 +43,7 @@ export const StoreProvider: React.FC<React.PropsWithChildren> = ({ children }) =
     setLoading(true);
     if (apiKey) {
       PanthorService.getProfile(apiKey)
-        .then(setProfile)
+        .then(({ data }) => setProfile(data))
         .catch(() => setProfile(null))
         .finally(() => setLoading(false));
     } else {

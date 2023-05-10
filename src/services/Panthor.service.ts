@@ -14,62 +14,73 @@ import type {
   ValidSecretResponse,
   VehicleResponse,
 } from '../types';
-import { ServiceResponse, TServiceResponse, handleServiceError } from './ServiceResponse';
+import { ServiceResponse, handleServiceError } from './ServiceResponse';
+import type { TServiceResponse } from './ServiceResponse';
 
 export class PanthorService {
   static options = {
     timeout: 2 * 1000,
   };
 
-  static async validateSecret(apiKey: string): Promise<Boolean> {
+  static async validateSecret(apiKey: string): Promise<TServiceResponse<boolean>> {
     try {
       const response = await axios.get(Panthor.apiBaseUrl + '/v1/player/validate/' + apiKey);
       const json: ValidSecretResponse | ErrorResponse = await response.data;
-      return json.status === 'Success';
-    } catch (message) {
-      console.error(message);
-      return false;
+      if (response.status !== 200 || json.status === undefined) {
+        throw new Error(JSON.stringify(json));
+      }
+      return ServiceResponse(json.status === 'Success');
+    } catch (error) {
+      return handleServiceError(false, error);
     }
   }
 
-  static async getProfile(apiKey: string): Promise<Profile | null> {
+  static async getProfile(apiKey: string): Promise<TServiceResponse<Profile | null>> {
     try {
-      const response = await axios.get<ApiResponse<ProfileResponse>>(Panthor.apiBaseUrl + '/v1/player/' + apiKey);
-      const json = await response.data;
-      if (response.status !== 200 || json.data === undefined) throw new Error(JSON.stringify(json));
-      return new Profile(json.data[0]);
-    } catch (message) {
-      console.error(message);
-      return null;
+      const response = await axios.get(Panthor.apiBaseUrl + '/v1/player/' + apiKey);
+      const json: ApiResponse<ProfileResponse> = await response.data;
+      if (response.status !== 200 || json.data === undefined) {
+        throw new Error(JSON.stringify(json));
+      }
+      return ServiceResponse(new Profile(json.data[0]));
+    } catch (error) {
+      return handleServiceError(null, error);
     }
   }
 
-  static async getVehicles(apiKey: string): Promise<Vehicle[]> {
+  static async getVehicles(apiKey: string): Promise<TServiceResponse<Vehicle[]>> {
     try {
       const response = await axios.get(Panthor.apiBaseUrl + '/v1/player/' + apiKey + '/vehicles');
       const json: ApiResponse<VehicleResponse> = await response.data;
-      return json.data.map((props) => new Vehicle(props));
-    } catch (message) {
-      console.error(message);
-      return [];
+      if (response.status !== 200 || json.data === undefined) {
+        throw new Error(JSON.stringify(json));
+      }
+      return ServiceResponse(json.data.map((props) => new Vehicle(props)));
+    } catch (error) {
+      return handleServiceError([], error);
     }
   }
 
-  static async getChangelogs(): Promise<Changelog[]> {
+  static async getChangelogs(): Promise<TServiceResponse<Changelog[]>> {
     try {
       const response = await axios.get(Panthor.apiBaseUrl + '/v1/changelog');
       const json: ApiResponse<ChangelogResponse> = await response.data;
-      return json.data.map((props) => new Changelog(props));
-    } catch (message) {
-      console.error(message);
-      return [];
+      if (response.status !== 200 || json.data === undefined) {
+        throw new Error(JSON.stringify(json));
+      }
+      return ServiceResponse(json.data.map((props) => new Changelog(props)));
+    } catch (error) {
+      return handleServiceError([], error);
     }
   }
 
   static async getServers(): Promise<TServiceResponse<RpgServer[] | Server[]>> {
     try {
       const response = await axios.get(Panthor.apiBaseUrl + '/v1/servers', this.options);
-      const json = await response.data;
+      const json: ApiResponse<ServerResponse> = await response.data;
+      if (response.status !== 200 || json.data === undefined) {
+        throw new Error(JSON.stringify(json));
+      }
       return ServiceResponse([
         ...json.data.map((server) =>
           server.Id < 16 ? new RpgServer(server as RpgServerResponse) : new Server(server as ServerResponse)
@@ -80,25 +91,29 @@ export class PanthorService {
     }
   }
 
-  static async getMarket(serverId: number): Promise<MarketItem[]> {
+  static async getMarket(serverId: number): Promise<TServiceResponse<MarketItem[]>> {
     try {
       const response = await axios.get(Panthor.apiBaseUrl + '/v1/market/' + serverId);
       const json: ApiResponse<MarketItemResponse> = await response.data;
-      return json.data.map((item) => new MarketItem(item));
-    } catch (message) {
-      console.error(message);
-      return [];
+      if (response.status !== 200 || json.data === undefined) {
+        throw new Error(JSON.stringify(json));
+      }
+      return ServiceResponse(json.data.map((item) => new MarketItem(item)));
+    } catch (error) {
+      return handleServiceError([], error);
     }
   }
 
-  static async getShopTypes(category: ShopCategory): Promise<ShopType[]> {
+  static async getShopTypes(category: ShopCategory): Promise<TServiceResponse<ShopType[]>> {
     try {
       const response = await axios.get(Panthor.apiBaseUrl + `/v1/info/${category}_shoptypes`);
       const json: ApiResponse<ShopTypeResponse> = await response.data;
-      return json.data.map((shop) => new ShopType(category, shop));
-    } catch (message) {
-      console.error(message);
-      return [];
+      if (response.status !== 200 || json.data === undefined) {
+        throw new Error(JSON.stringify(json));
+      }
+      return ServiceResponse(json.data.map((shop) => new ShopType(category, shop)));
+    } catch (error) {
+      return handleServiceError([], error);
     }
   }
 }

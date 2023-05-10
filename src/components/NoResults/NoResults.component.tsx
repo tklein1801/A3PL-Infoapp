@@ -1,14 +1,16 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Button, Card, Text } from 'react-native-paper';
 import type { CardProps } from 'react-native-paper';
 import { Icon, IconSize } from '../Icon';
 import type { IconProps } from '../Icon';
 
-export type Reason = 'NO_RESULTS' | 'NETWORK_ERR' | 'UNKNOWN_ERROR';
+export type Reason = 'NO_RESULTS' | 'NETWORK_ERR' | 'MISSING_API_KEY' | 'UNKNOWN_ERROR';
 
 export function isReason(reason: string) {
-  return reason === 'NO_RESULTS' || reason === 'NETWORK_ERR' || reason === 'UNKNOWN_ERROR';
+  return (
+    reason === 'NO_RESULTS' || reason === 'NETWORK_ERR' || reason === 'MISSING_API_KEY' || reason === 'UNKNOWN_ERROR'
+  );
 }
 
 export type NoResultsProps = {
@@ -21,6 +23,7 @@ export type NoResultsProps = {
 export enum ResultMessage {
   NoResults = 'Keine Ergebnisse',
   NetworkError = 'Netzwerfehler',
+  MissingApiKey = 'API-Key nicht gesetzt',
   UnknownError = 'Unbekannter Fehler',
 }
 
@@ -33,6 +36,9 @@ export const NoResults: React.FC<NoResultsProps> = ({ message, reason, icon, ico
 
       case 'NO_RESULTS':
         return ResultMessage.NoResults;
+
+      case 'MISSING_API_KEY':
+        return ResultMessage.MissingApiKey;
 
       case 'UNKNOWN_ERROR':
       default:
@@ -48,6 +54,9 @@ export const NoResults: React.FC<NoResultsProps> = ({ message, reason, icon, ico
 
       case 'NO_RESULTS':
         return 'text-search';
+
+      case 'MISSING_API_KEY':
+        return 'account-key';
 
       case 'UNKNOWN_ERROR':
       default:
