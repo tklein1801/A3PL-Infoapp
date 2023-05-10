@@ -73,6 +73,10 @@ npm i
 npm run build:android # Build an .apk
 ```
 
+### Theme anpassen
+
+React Native Paper bietet bietet ein [Tool](https://callstack.github.io/react-native-paper/docs/guides/theming#theme-properties) an um automatisch eine Farbpalette für den Theme-Provider zu generieren.
+
 ### FaQ
 
 | Frage     | Antwort                                        |
