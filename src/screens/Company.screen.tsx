@@ -2,22 +2,27 @@ import React from 'react';
 import { ActivityIndicator, Card, List } from 'react-native-paper';
 import { Company } from '../components/Company';
 import { Layout } from '../components/Layout';
-import { NoResults } from '../components/NoResults';
+import { NoResults, isReason } from '../components/NoResults';
+import type { Reason } from '../components/NoResults';
 import { StoreContext } from '../context/Store.context';
 import { PanthorService } from '../services';
-import { Company as CompanyModel } from '../types';
+import type { TServiceResponse } from '../services';
+import { Company as CCompany } from '../types';
+import { MissingApiKey } from '../types/MissingApiKey.error';
 
 export const CompanyScreen = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing } = React.useContext(StoreContext);
-  const [companies, setCompanies] = React.useState<CompanyModel[]>([]);
-  const [currentCompany, setCurrentCompany] = React.useState<CompanyModel['id'] | null>(null);
+  const [companies, setCompanies] = React.useState<CCompany[]>([]);
+  const [currentCompany, setCurrentCompany] = React.useState<CCompany['id'] | null>(null);
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
       try {
-        if (!apiKey) return;
-        const result = await PanthorService.getProfile(apiKey);
-        setCompanies(result.company_owned);
+        if (!apiKey) return setError({ error: new MissingApiKey() });
+        const { data, error, errorReason } = await PanthorService.getProfile(apiKey);
+        setError(error || errorReason ? { error, errorReason } : null);
+        setCompanies(data.company_owned);
       } catch (error) {
         console.error(error);
       }
@@ -32,7 +37,6 @@ export const CompanyScreen = () => {
   };
 
   React.useEffect(() => {
-    if (!apiKey) return;
     setLoading(true);
     handler.fetchData().finally(() => setLoading(false));
   }, [apiKey]);
@@ -44,6 +48,19 @@ export const CompanyScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
+      {error && (error.error || error.errorReason) ? (
+        <NoResults
+          reason={
+            error.errorReason
+              ? error.errorReason
+              : isReason(error.error.message)
+              ? (error.error.message as Reason)
+              : 'UNKNOWN_ERROR'
+          }
+          style={{ marginBottom: 16 }}
+        />
+      ) : null}
+
       {loading ? (
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
@@ -51,7 +68,6 @@ export const CompanyScreen = () => {
       ) : (
         <React.Fragment>
           <List.Section>
-            <List.Subheader style={{ fontSize: 16 }}>Eigene Firmen</List.Subheader>
             <List.AccordionGroup expandedId={currentCompany} onAccordionPress={handler.onAccordionPress}>
               {companies.length > 0 ? (
                 companies.map((company, index, arr) => (
@@ -63,9 +79,9 @@ export const CompanyScreen = () => {
                     isExpanded={currentCompany === company.id}
                   />
                 ))
-              ) : (
-                <NoResults message="Keine Firmen gefunden" />
-              )}
+              ) : !error ? (
+                <NoResults message="Keine Firmen gefunden" reason="NO_RESULTS" />
+              ) : null}
             </List.AccordionGroup>
           </List.Section>
         </React.Fragment>

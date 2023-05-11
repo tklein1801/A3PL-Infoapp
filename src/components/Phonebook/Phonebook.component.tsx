@@ -2,9 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 import { Avatar, Chip, Divider, List, Searchbar } from 'react-native-paper';
 import { Phonebook as PhonebookModel, Profile } from '../../types';
-import { Accordion } from '../Accordion/Accordion.component';
-import { LabelValue } from '../LabelValue/LabelValue.component';
-import { NoResults } from '../NoResults/NoResults.component';
+import { Accordion } from '../Accordion';
+import { LabelValue } from '../LabelValue';
+import { NoResults } from '../NoResults';
 
 export interface PhonebookProps {
   phonebook: PhonebookModel;
@@ -99,7 +99,7 @@ export const PhonebookWrapper: React.FC<PhonebookWrapperProps> = ({ phonebooks }
           ))}
         </List.AccordionGroup>
       ) : (
-        <NoResults message="Keine Kontakte gefunden" />
+        <NoResults message="Keine Telefonbücher gefunden" icon="contacts" />
       )}
     </React.Fragment>
   );

@@ -1,26 +1,27 @@
 import { format } from 'date-fns';
 import React from 'react';
 import { ActivityIndicator, Avatar, Card, Text } from 'react-native-paper';
-import { LabelValue } from '../components/LabelValue/LabelValue.component';
-import { Layout } from '../components/Layout/Layout.component';
-import { Progress } from '../components/Progress/Progress.component';
+import { LabelValue } from '../components/LabelValue';
+import { Layout } from '../components/Layout';
+import { NoResults, isReason } from '../components/NoResults';
+import type { Reason } from '../components/NoResults';
+import { Progress } from '../components/Progress';
 import { StoreContext } from '../context/Store.context';
-import { PanthorService } from '../services';
-import { formatter } from '../services/CurrencyFormat.service';
+import { PanthorService, formatter } from '../services';
+import type { TServiceResponse } from '../services';
+import { MissingApiKey } from '../types/MissingApiKey.error';
 
 export const PlayerProfile = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing, profile, setProfile } =
     React.useContext(StoreContext);
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
-      try {
-        if (!apiKey) return;
-        const result = await PanthorService.getProfile(apiKey);
-        setProfile(result);
-      } catch (error) {
-        console.error(error);
-      }
+      if (!apiKey) return setError({ error: new MissingApiKey() });
+      const { data, error, errorReason } = await PanthorService.getProfile(apiKey);
+      setError(error || errorReason ? { error, errorReason } : null);
+      setProfile(data);
     },
     onRefresh: () => {
       setRefreshing(true);
@@ -29,7 +30,6 @@ export const PlayerProfile = () => {
   };
 
   React.useEffect(() => {
-    if (!apiKey || profile) return;
     setLoading(true);
     handler.fetchData().finally(() => setLoading(false));
   }, [apiKey]);
@@ -41,11 +41,24 @@ export const PlayerProfile = () => {
         onRefresh: handler.onRefresh,
       }}
     >
+      {error && (error.error || error.errorReason) ? (
+        <NoResults
+          reason={
+            error.errorReason
+              ? error.errorReason
+              : isReason(error.error.message)
+              ? (error.error.message as Reason)
+              : 'UNKNOWN_ERROR'
+          }
+          style={{ marginBottom: 16 }}
+        />
+      ) : null}
+
       {loading ? (
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
         </Card>
-      ) : (
+      ) : profile !== null && !error ? (
         <React.Fragment>
           <Card style={{ marginBottom: 16, padding: 16 }}>
             <Avatar.Image
@@ -83,6 +96,20 @@ export const PlayerProfile = () => {
             <LabelValue label="Beigetreten" value={format(profile.joined_at, 'dd.MM.yy, HH:mm') + ' Uhr'} withDivider />
           </Card>
         </React.Fragment>
+      ) : (
+        <NoResults
+          icon={error !== null ? undefined : 'account-circle-outline'}
+          message={error !== null ? undefined : 'Dein Profil konnte nicht geladen werden'}
+          reason={
+            error !== null
+              ? error.errorReason
+                ? error.errorReason
+                : isReason(error.error.message)
+                ? (error.error.message as Reason)
+                : 'UNKNOWN_ERROR'
+              : 'NO_RESULTS'
+          }
+        />
       )}
     </Layout>
   );

@@ -2,10 +2,13 @@ import { differenceInSeconds } from 'date-fns';
 import React from 'react';
 import { View } from 'react-native';
 import { ActivityIndicator, Card } from 'react-native-paper';
-import { Layout } from '../components/Layout/Layout.component';
+import { Layout } from '../components/Layout';
 import { ItemBonus, Market, PriceCalculation, PriceCalculationProps } from '../components/Market';
+import { NoResults, isReason } from '../components/NoResults';
+import type { Reason } from '../components/NoResults';
 import { StoreContext } from '../context/Store.context';
 import { PanthorService } from '../services';
+import type { TServiceResponse } from '../services';
 import { MarketItem as CMarketItem, RpgServer } from '../types';
 
 export const MarketScreen = () => {
@@ -17,6 +20,7 @@ export const MarketScreen = () => {
     date: new Date(),
     interval: 0,
   });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const policeOnlineCount = React.useMemo(() => {
     return servers[0] instanceof RpgServer ? servers[0].cops : 0;
@@ -26,13 +30,22 @@ export const MarketScreen = () => {
     fetchData: async () => {
       try {
         const [market, fetchedServers] = await Promise.all([PanthorService.getMarket(1), PanthorService.getServers()]);
-        const [newer, older] = await market[0].getPriceBacklog(1, 2);
-        setRefreshInterval({
-          date: newer.createdAt,
-          interval: differenceInSeconds(newer.createdAt, older.createdAt),
-        });
-        setItems(market);
-        setServers(fetchedServers);
+        if (market.error || market.errorReason) {
+          setError({ error: market.error, errorReason: market.errorReason });
+        } else if (fetchedServers.error || fetchedServers.errorReason) {
+          setError({ error: fetchedServers.error, errorReason: fetchedServers.errorReason });
+        }
+
+        if (market.data.length >= 1) {
+          const [newer, older] = await market.data[0].getPriceBacklog(1, 2);
+          setRefreshInterval({
+            date: newer.createdAt,
+            interval: differenceInSeconds(newer.createdAt, older.createdAt),
+          });
+        }
+
+        setItems(market.data);
+        setServers(fetchedServers.data);
       } catch (error) {
         console.error(error);
       }
@@ -45,7 +58,12 @@ export const MarketScreen = () => {
 
   React.useEffect(() => {
     if (servers.length > 0) return;
-    PanthorService.getServers().then(setServers).catch(console.error);
+    PanthorService.getServers()
+      .then(({ data, error, errorReason }) => {
+        setServers(data);
+        setError({ error, errorReason });
+      })
+      .catch(console.error);
   }, [servers]);
 
   React.useEffect(() => {
@@ -60,20 +78,33 @@ export const MarketScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
+      {error && (error.error || error.errorReason) ? (
+        <NoResults
+          reason={
+            error.errorReason
+              ? error.errorReason
+              : isReason(error.error.message)
+              ? (error.error.message as Reason)
+              : 'UNKNOWN_ERROR'
+          }
+          style={{ marginBottom: 16 }}
+        />
+      ) : null}
+
       <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', flex: 1, columnGap: 8, marginBottom: 8 }}>
-        <ItemBonus copAmount={policeOnlineCount} />
-        <PriceCalculation {...refreshInterval} />
+        {!loading && <ItemBonus copAmount={policeOnlineCount} />}
+        {!loading && refreshInterval.interval > 0 && <PriceCalculation {...refreshInterval} />}
       </View>
 
       {loading ? (
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
         </Card>
-      ) : (
+      ) : !error ? (
         <Card>
           <Market.Wrapper items={items} policeOnlineCount={policeOnlineCount} />
         </Card>
-      )}
+      ) : null}
     </Layout>
   );
 };

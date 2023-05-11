@@ -1,20 +1,26 @@
 import React from 'react';
 import { ActivityIndicator, Card } from 'react-native-paper';
-import { Layout } from '../components/Layout/Layout.component';
-import { PhonebookWrapper } from '../components/Phonebook/Phonebook.component';
+import { Layout } from '../components/Layout';
+import { NoResults, isReason } from '../components/NoResults';
+import type { Reason } from '../components/NoResults';
+import { PhonebookWrapper } from '../components/Phonebook';
 import { StoreContext } from '../context/Store.context';
 import { PanthorService } from '../services';
+import type { TServiceResponse } from '../services';
+import { MissingApiKey } from '../types/MissingApiKey.error';
 
 export const ContactsScreen = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing, profile, setProfile } =
     React.useContext(StoreContext);
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
       try {
-        if (!apiKey) return;
-        const result = await PanthorService.getProfile(apiKey);
-        setProfile(result);
+        if (!apiKey) return setError({ error: new MissingApiKey() });
+        const { data, error, errorReason } = await PanthorService.getProfile(apiKey);
+        setError(error || errorReason ? { error, errorReason } : null);
+        setProfile(data);
       } catch (error) {
         console.error(error);
       }
@@ -26,7 +32,7 @@ export const ContactsScreen = () => {
   };
 
   React.useEffect(() => {
-    if (!apiKey || profile) return;
+    if (profile) return;
     setLoading(true);
     handler.fetchData().finally(() => setLoading(false));
   }, [apiKey]);
@@ -44,7 +50,20 @@ export const ContactsScreen = () => {
         </Card>
       ) : (
         <React.Fragment>
-          <PhonebookWrapper phonebooks={profile.phonebooks} />
+          {error && (error.error || error.errorReason) ? (
+            <NoResults
+              reason={
+                error.errorReason
+                  ? error.errorReason
+                  : isReason(error.error.message)
+                  ? (error.error.message as Reason)
+                  : 'UNKNOWN_ERROR'
+              }
+              style={{ marginBottom: 16 }}
+            />
+          ) : null}
+
+          {profile.phonebooks.length > 0 ? <PhonebookWrapper phonebooks={profile.phonebooks} /> : null}
         </React.Fragment>
       )}
     </Layout>

@@ -92,7 +92,7 @@ export const SettingsScreen = () => {
             label="API-Key"
             value={value}
             onChangeText={setValue}
-            style={{ marginTop: 8, backgroundColor: theme.colors.elevation.level2 }}
+            style={{ marginTop: 8, backgroundColor: theme.colors.elevation.level1 }}
           />
         </Card.Content>
         <Card.Actions>

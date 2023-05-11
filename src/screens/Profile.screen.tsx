@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CustomBottomTabBar } from '../components/CustomBottomTabBar/CustomBottomTabBar.component';
+import { CustomBottomTabBar } from '../components/CustomBottomTabBar';
 import { ContactsScreen } from './Contacts.screen';
 import { GarageScreen } from './Garage.screen';
 import { HouseScreen } from './HouseScreen.screen';

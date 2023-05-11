@@ -1,11 +1,14 @@
 import React from 'react';
 import { ActivityIndicator, Card } from 'react-native-paper';
-import { HorizontalCardList } from '../components/Card/HorizontalCardList.component';
-import { Layout } from '../components/Layout/Layout.component';
-import { Playerlist } from '../components/Playerlist/Playerlist.component';
-import { Server as ServerComponent, ServerProps } from '../components/Server/Server.component';
+import { HorizontalCardList } from '../components/Card';
+import { Layout } from '../components/Layout';
+import { NoResults, isReason } from '../components/NoResults';
+import type { Reason } from '../components/NoResults';
+import { Playerlist } from '../components/Playerlist';
+import { Server as ServerComponent, ServerProps } from '../components/Server';
 import { StoreContext } from '../context/Store.context';
 import { PanthorService } from '../services';
+import type { TServiceResponse } from '../services';
 import { RpgServer, Server } from '../types';
 
 export const HomeScreen = () => {
@@ -14,6 +17,7 @@ export const HomeScreen = () => {
   const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
   const [selectedServer, setSelectedServer] = React.useState<RpgServer | Server | null>(null);
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const playerList = React.useMemo(() => {
     return selectedServer ? selectedServer.players : [];
@@ -21,13 +25,10 @@ export const HomeScreen = () => {
 
   const handler = {
     fetchData: async () => {
-      try {
-        const result = await PanthorService.getServers();
-        setServers(result);
-        setSelectedServer(result[0] || null);
-      } catch (error) {
-        console.error(error);
-      }
+      const { data, error, errorReason } = await PanthorService.getServers();
+      setError(error || errorReason ? { error, errorReason } : null);
+      setServers(data);
+      setSelectedServer(data[0] || null);
     },
     onRefresh: () => {
       setRefreshing(true);
@@ -54,7 +55,7 @@ export const HomeScreen = () => {
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
         </Card>
-      ) : (
+      ) : servers.length > 0 && !error ? (
         <HorizontalCardList
           // Maybe we don't wanna change the displayed player-list on every card-scroll
           // onScroll={(curIdx) => handler.onCardPress(servers[curIdx])}
@@ -66,9 +67,22 @@ export const HomeScreen = () => {
             />
           ))}
         />
+      ) : (
+        <NoResults
+          message={error !== null ? undefined : 'Keine Server online'}
+          reason={
+            error !== null
+              ? error.errorReason
+                ? error.errorReason
+                : isReason(error.error.message)
+                ? (error.error.message as Reason)
+                : 'UNKNOWN_ERROR'
+              : 'NO_RESULTS'
+          }
+        />
       )}
 
-      {selectedServer ? <Playerlist players={playerList} /> : null}
+      {servers.length > 0 && !error && selectedServer ? <Playerlist players={playerList} /> : null}
     </Layout>
   );
 };

@@ -1,8 +1,11 @@
 import React from 'react';
 import { ActivityIndicator, Card, List } from 'react-native-paper';
-import { Layout } from '../components/Layout/Layout.component';
-import { TraderOffers } from '../components/TraderOffers/TraderOffers.component';
+import { Layout } from '../components/Layout';
+import { NoResults, isReason } from '../components/NoResults';
+import type { Reason } from '../components/NoResults';
+import { TraderOffers } from '../components/TraderOffers';
 import { PanthorService } from '../services';
+import type { TServiceResponse } from '../services';
 import { ShopCategory, ShopType } from '../types';
 
 export type TraderScreenProps = {
@@ -14,15 +17,13 @@ export const TraderScreen: React.FC<TraderScreenProps> = ({ category }) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [currentShop, setCurrentShop] = React.useState<ShopType['type'] | null>(null);
   const [shops, setShops] = React.useState<ShopType[]>([]);
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
-      try {
-        const result = await PanthorService.getShopTypes(category);
-        setShops(result);
-      } catch (error) {
-        console.error(error);
-      }
+      const { data, error, errorReason } = await PanthorService.getShopTypes(category);
+      setError(error || errorReason ? { error, errorReason } : null);
+      setShops(data);
     },
     onRefresh: () => {
       setRefreshing(true);
@@ -34,6 +35,7 @@ export const TraderScreen: React.FC<TraderScreenProps> = ({ category }) => {
   };
 
   React.useEffect(() => {
+    setLoading(true);
     handler.fetchData().finally(() => setLoading(false));
   }, [category]);
 
@@ -44,11 +46,24 @@ export const TraderScreen: React.FC<TraderScreenProps> = ({ category }) => {
         onRefresh: handler.onRefresh,
       }}
     >
+      {error && (error.error || error.errorReason) ? (
+        <NoResults
+          reason={
+            error.errorReason
+              ? error.errorReason
+              : isReason(error.error.message)
+              ? (error.error.message as Reason)
+              : 'UNKNOWN_ERROR'
+          }
+          style={{ marginBottom: 16 }}
+        />
+      ) : null}
+
       {loading ? (
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
         </Card>
-      ) : (
+      ) : shops.length > 0 ? (
         <List.AccordionGroup expandedId={currentShop} onAccordionPress={handler.onAccordionPress}>
           {shops.map((shop, index, arr) => (
             <React.Fragment key={shop.type}>
@@ -61,7 +76,9 @@ export const TraderScreen: React.FC<TraderScreenProps> = ({ category }) => {
             </React.Fragment>
           ))}
         </List.AccordionGroup>
-      )}
+      ) : !error ? (
+        <NoResults message="Keine Händler gefunden" reason="NO_RESULTS" />
+      ) : null}
     </Layout>
   );
 };
