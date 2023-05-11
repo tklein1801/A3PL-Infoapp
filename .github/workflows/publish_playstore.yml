@@ -38,7 +38,7 @@ jobs:
 
       - name: 🚀 Build app
         id: build
-        run: eas build -p android --profile production
+        run: eas build -p android --profile production --local
 
       - name: 🔼 Upload Artifact if build successful
         if: steps.build.outcome == 'success'
