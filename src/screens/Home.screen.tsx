@@ -17,10 +17,7 @@ export const HomeScreen = () => {
   const [loading, setLoading] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
   const [selectedServer, setSelectedServer] = React.useState<RpgServer | Server | null>(null);
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const playerList = React.useMemo(() => {
     return selectedServer ? selectedServer.players : [];
@@ -29,7 +26,7 @@ export const HomeScreen = () => {
   const handler = {
     fetchData: async () => {
       const { data, error, errorReason } = await PanthorService.getServers();
-      setError({ error, errorReason });
+      setError(error || errorReason ? { error, errorReason } : null);
       setServers(data);
       setSelectedServer(data[0] || null);
     },
@@ -54,24 +51,11 @@ export const HomeScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
-      {error.error || error.errorReason ? (
-        <NoResults
-          reason={
-            error.errorReason
-              ? error.errorReason
-              : isReason(error.error.message)
-              ? (error.error.message as Reason)
-              : 'UNKNOWN_ERROR'
-          }
-          style={{ marginBottom: 16 }}
-        />
-      ) : null}
-
       {loading ? (
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
         </Card>
-      ) : servers.length > 0 ? (
+      ) : servers.length > 0 && !error ? (
         <HorizontalCardList
           // Maybe we don't wanna change the displayed player-list on every card-scroll
           // onScroll={(curIdx) => handler.onCardPress(servers[curIdx])}
@@ -84,10 +68,21 @@ export const HomeScreen = () => {
           ))}
         />
       ) : (
-        <NoResults reason="NO_RESULTS" />
+        <NoResults
+          message={error !== null ? undefined : 'Keine Server online'}
+          reason={
+            error !== null
+              ? error.errorReason
+                ? error.errorReason
+                : isReason(error.error.message)
+                ? (error.error.message as Reason)
+                : 'UNKNOWN_ERROR'
+              : 'NO_RESULTS'
+          }
+        />
       )}
 
-      {servers.length > 0 && selectedServer ? <Playerlist players={playerList} /> : null}
+      {servers.length > 0 && !error && selectedServer ? <Playerlist players={playerList} /> : null}
     </Layout>
   );
 };

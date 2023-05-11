@@ -17,15 +17,12 @@ export const TraderScreen: React.FC<TraderScreenProps> = ({ category }) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [currentShop, setCurrentShop] = React.useState<ShopType['type'] | null>(null);
   const [shops, setShops] = React.useState<ShopType[]>([]);
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
       const { data, error, errorReason } = await PanthorService.getShopTypes(category);
-      setError({ error, errorReason });
+      setError(error || errorReason ? { error, errorReason } : null);
       setShops(data);
     },
     onRefresh: () => {
@@ -49,7 +46,7 @@ export const TraderScreen: React.FC<TraderScreenProps> = ({ category }) => {
         onRefresh: handler.onRefresh,
       }}
     >
-      {error.error || error.errorReason ? (
+      {error && (error.error || error.errorReason) ? (
         <NoResults
           reason={
             error.errorReason
@@ -79,9 +76,9 @@ export const TraderScreen: React.FC<TraderScreenProps> = ({ category }) => {
             </React.Fragment>
           ))}
         </List.AccordionGroup>
-      ) : (
+      ) : !error ? (
         <NoResults message="Keine Händler gefunden" reason="NO_RESULTS" />
-      )}
+      ) : null}
     </Layout>
   );
 };

@@ -20,10 +20,7 @@ export const MarketScreen = () => {
     date: new Date(),
     interval: 0,
   });
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const policeOnlineCount = React.useMemo(() => {
     return servers[0] instanceof RpgServer ? servers[0].cops : 0;
@@ -33,7 +30,7 @@ export const MarketScreen = () => {
     fetchData: async () => {
       try {
         const [market, fetchedServers] = await Promise.all([PanthorService.getMarket(1), PanthorService.getServers()]);
-        if (market.error || error.errorReason) {
+        if (market.error || market.errorReason) {
           setError({ error: market.error, errorReason: market.errorReason });
         } else if (fetchedServers.error || fetchedServers.errorReason) {
           setError({ error: fetchedServers.error, errorReason: fetchedServers.errorReason });
@@ -81,7 +78,7 @@ export const MarketScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
-      {error.error || error.errorReason ? (
+      {error && (error.error || error.errorReason) ? (
         <NoResults
           reason={
             error.errorReason
@@ -103,11 +100,11 @@ export const MarketScreen = () => {
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
         </Card>
-      ) : (
+      ) : !error ? (
         <Card>
           <Market.Wrapper items={items} policeOnlineCount={policeOnlineCount} />
         </Card>
-      )}
+      ) : null}
     </Layout>
   );
 };

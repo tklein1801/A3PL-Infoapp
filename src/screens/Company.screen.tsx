@@ -14,17 +14,14 @@ export const CompanyScreen = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing } = React.useContext(StoreContext);
   const [companies, setCompanies] = React.useState<CCompany[]>([]);
   const [currentCompany, setCurrentCompany] = React.useState<CCompany['id'] | null>(null);
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
       try {
         if (!apiKey) return setError({ error: new MissingApiKey() });
         const { data, error, errorReason } = await PanthorService.getProfile(apiKey);
-        setError({ error, errorReason });
+        setError(error || errorReason ? { error, errorReason } : null);
         setCompanies(data.company_owned);
       } catch (error) {
         console.error(error);
@@ -51,7 +48,7 @@ export const CompanyScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
-      {error.error || error.errorReason ? (
+      {error && (error.error || error.errorReason) ? (
         <NoResults
           reason={
             error.errorReason
@@ -82,9 +79,9 @@ export const CompanyScreen = () => {
                     isExpanded={currentCompany === company.id}
                   />
                 ))
-              ) : (
+              ) : !error ? (
                 <NoResults message="Keine Firmen gefunden" reason="NO_RESULTS" />
-              )}
+              ) : null}
             </List.AccordionGroup>
           </List.Section>
         </React.Fragment>

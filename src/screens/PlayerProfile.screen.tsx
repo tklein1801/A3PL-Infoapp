@@ -14,16 +14,13 @@ import { MissingApiKey } from '../types/MissingApiKey.error';
 export const PlayerProfile = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing, profile, setProfile } =
     React.useContext(StoreContext);
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
       if (!apiKey) return setError({ error: new MissingApiKey() });
       const { data, error, errorReason } = await PanthorService.getProfile(apiKey);
-      setError({ error, errorReason });
+      setError(error || errorReason ? { error, errorReason } : null);
       setProfile(data);
     },
     onRefresh: () => {
@@ -44,7 +41,7 @@ export const PlayerProfile = () => {
         onRefresh: handler.onRefresh,
       }}
     >
-      {error.error || error.errorReason ? (
+      {error && (error.error || error.errorReason) ? (
         <NoResults
           reason={
             error.errorReason
@@ -61,7 +58,7 @@ export const PlayerProfile = () => {
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
         </Card>
-      ) : profile !== null ? (
+      ) : profile !== null && !error ? (
         <React.Fragment>
           <Card style={{ marginBottom: 16, padding: 16 }}>
             <Avatar.Image
@@ -100,7 +97,19 @@ export const PlayerProfile = () => {
           </Card>
         </React.Fragment>
       ) : (
-        <NoResults icon="account-circle-outline" message="Dein Profil konnte nicht geladen werden" />
+        <NoResults
+          icon={error !== null ? undefined : 'account-circle-outline'}
+          message={error !== null ? undefined : 'Dein Profil konnte nicht geladen werden'}
+          reason={
+            error !== null
+              ? error.errorReason
+                ? error.errorReason
+                : isReason(error.error.message)
+                ? (error.error.message as Reason)
+                : 'UNKNOWN_ERROR'
+              : 'NO_RESULTS'
+          }
+        />
       )}
     </Layout>
   );

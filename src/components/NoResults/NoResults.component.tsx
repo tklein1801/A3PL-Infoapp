@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Card, Text } from 'react-native-paper';
+import { Card, Text } from 'react-native-paper';
 import type { CardProps } from 'react-native-paper';
 import { Icon, IconSize } from '../Icon';
 import type { IconProps } from '../Icon';

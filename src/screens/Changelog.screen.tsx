@@ -13,15 +13,12 @@ export const ChangelogScreen = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [changelogs, setChangelogs] = React.useState<ChangelogModel[]>([]);
   const [expandedChangelog, setExpandedChangelog] = React.useState<ChangelogModel['id'] | null>(null);
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
       const { data, error, errorReason } = await PanthorService.getChangelogs();
-      setError({ error, errorReason });
+      setError(error || errorReason ? { error, errorReason } : null);
       setChangelogs(data);
     },
     onRefresh: () => {
@@ -45,7 +42,7 @@ export const ChangelogScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
-      {error.error || error.errorReason ? (
+      {error && (error.error || error.errorReason) ? (
         <NoResults
           reason={
             error.errorReason
@@ -75,9 +72,9 @@ export const ChangelogScreen = () => {
             </React.Fragment>
           ))}
         </List.AccordionGroup>
-      ) : (
+      ) : !error ? (
         <NoResults message="Keine Changelogs gefunden" reason="NO_RESULTS" />
-      )}
+      ) : null}
     </Layout>
   );
 };

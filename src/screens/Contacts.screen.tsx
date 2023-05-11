@@ -12,17 +12,14 @@ import { MissingApiKey } from '../types/MissingApiKey.error';
 export const ContactsScreen = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing, profile, setProfile } =
     React.useContext(StoreContext);
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
       try {
         if (!apiKey) return setError({ error: new MissingApiKey() });
         const { data, error, errorReason } = await PanthorService.getProfile(apiKey);
-        setError({ error, errorReason });
+        setError(error || errorReason ? { error, errorReason } : null);
         setProfile(data);
       } catch (error) {
         console.error(error);
@@ -53,7 +50,7 @@ export const ContactsScreen = () => {
         </Card>
       ) : (
         <React.Fragment>
-          {error.error || error.errorReason ? (
+          {error && (error.error || error.errorReason) ? (
             <NoResults
               reason={
                 error.errorReason
@@ -66,7 +63,7 @@ export const ContactsScreen = () => {
             />
           ) : null}
 
-          <PhonebookWrapper phonebooks={profile.phonebooks} />
+          {profile.phonebooks.length > 0 ? <PhonebookWrapper phonebooks={profile.phonebooks} /> : null}
         </React.Fragment>
       )}
     </Layout>

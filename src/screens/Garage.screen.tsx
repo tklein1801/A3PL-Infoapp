@@ -14,10 +14,7 @@ export const GarageScreen = () => {
   const { apiKey, loading, setLoading, refreshing, setRefreshing } = React.useContext(StoreContext);
   const [vehicles, setVehicles] = React.useState<CVehicle[]>([]);
   const [currentVehicle, setCurrentVehicle] = React.useState<CVehicle['id'] | null>(null);
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const activeVehicles = React.useMemo(() => {
     return vehicles
@@ -36,7 +33,7 @@ export const GarageScreen = () => {
       try {
         if (!apiKey) return setError({ error: new MissingApiKey() });
         const { data, error, errorReason } = await PanthorService.getVehicles(apiKey);
-        setError({ error, errorReason });
+        setError(error || errorReason ? { error, errorReason } : null);
         setVehicles(data);
       } catch (error) {
         console.error(error);
@@ -64,26 +61,13 @@ export const GarageScreen = () => {
         onRefresh: handler.onRefresh,
       }}
     >
-      {error.error || error.errorReason ? (
-        <NoResults
-          reason={
-            error.errorReason
-              ? error.errorReason
-              : isReason(error.error.message)
-              ? (error.error.message as Reason)
-              : 'UNKNOWN_ERROR'
-          }
-          style={{ marginBottom: 16 }}
-        />
-      ) : null}
-
       {loading ? (
         <Card elevation={1} style={{ padding: 16 }}>
           <ActivityIndicator animating={true} />
         </Card>
       ) : (
         <React.Fragment>
-          {activeVehicles.length > 30 ? (
+          {activeVehicles.length > 0 && !error ? (
             <List.AccordionGroup expandedId={currentVehicle} onAccordionPress={handler.onAccordionPress}>
               {activeVehicles.map((vehicle, index, arr) => (
                 <Vehicle
@@ -96,7 +80,18 @@ export const GarageScreen = () => {
               ))}
             </List.AccordionGroup>
           ) : (
-            <NoResults message="Keine intakten Fahrzeuge gefunden" reason="NO_RESULTS" />
+            <NoResults
+              message={error !== null ? undefined : 'Keine intakten Fahrzeuge gefunden'}
+              reason={
+                error !== null
+                  ? error.errorReason
+                    ? error.errorReason
+                    : isReason(error.error.message)
+                    ? (error.error.message as Reason)
+                    : 'UNKNOWN_ERROR'
+                  : 'NO_RESULTS'
+              }
+            />
           )}
         </React.Fragment>
       )}

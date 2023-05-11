@@ -21,17 +21,14 @@ export const HouseScreen: React.FC<HouseScreenProps> = () => {
     houses: [],
     rental: [],
   });
-  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>({
-    error: null,
-    errorReason: null,
-  });
+  const [error, setError] = React.useState<Pick<TServiceResponse<any>, 'error' | 'errorReason'>>(null);
 
   const handler = {
     fetchData: async () => {
       try {
         if (!apiKey) return setError({ error: new MissingApiKey() });
         const { data, error, errorReason } = await PanthorService.getProfile(apiKey);
-        setError({ error, errorReason });
+        setError(error || errorReason ? { error, errorReason } : null);
         setHouses({
           houses: data.houses,
           rental: data.rentals,
@@ -61,7 +58,7 @@ export const HouseScreen: React.FC<HouseScreenProps> = () => {
         onRefresh: handler.onRefresh,
       }}
     >
-      {error.error || error.errorReason ? (
+      {error && (error.error || error.errorReason) ? (
         <NoResults
           reason={
             error.errorReason
@@ -91,9 +88,9 @@ export const HouseScreen: React.FC<HouseScreenProps> = () => {
                     isExpanded={currentHouse === house.id}
                   />
                 ))
-              ) : (
+              ) : !error ? (
                 <NoResults message="Es konnten keine Häuser gefunden werden" icon="home-search-outline" />
-              )}
+              ) : null}
             </List.Section>
 
             <List.Section>
@@ -106,9 +103,9 @@ export const HouseScreen: React.FC<HouseScreenProps> = () => {
                     isExpanded={currentHouse === rental.id}
                   />
                 ))
-              ) : (
+              ) : !error ? (
                 <NoResults message="Es wurde kein Appartment gefunden" icon="home-search-outline" />
-              )}
+              ) : null}
             </List.Section>
           </List.AccordionGroup>
         </React.Fragment>
